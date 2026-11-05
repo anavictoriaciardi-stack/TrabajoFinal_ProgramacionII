@@ -19,7 +19,15 @@ public class MascotaDAO {
             ps.setInt(4, mascota.getEdad());
             ps.setString(5, mascota.getCliente_dni());
             ps.executeUpdate();
-            System.out.println("Mascota insertada correctamente.");
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idGenerado = generatedKeys.getInt(1); // Obtenemos el número de ID
+                    mascota.setId(idGenerado); // Lo guardamos en el objeto en memoria
+                    System.out.println("Mascota insertada con éxito. ID asignado: " + idGenerado);
+                }
+            }
+
         }
     }
 

@@ -27,7 +27,7 @@ public class ClienteDAO {
             ps.setString(6, cliente.getDomicilio());
 
             ps.executeUpdate();
-            System.out.println("Cliente insertado correctamente.");
+
 
         }
     }

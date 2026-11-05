@@ -26,6 +26,13 @@ public class TurnoDAO {
 
             ps.executeUpdate();
 
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idGenerado = generatedKeys.getInt(1);
+                    turno.setID(idGenerado); // Se lo asignamos al objeto en memoria
+                }
+            }
+
         }
     }
 
@@ -44,6 +51,8 @@ public class TurnoDAO {
                 t.setFecha(rs.getDate("fecha").toLocalDate());
                 t.setHora(rs.getTime("hora").toLocalTime());
                 t.setCosto(rs.getDouble("costo"));
+                t.setDni_cliente(rs.getString("cliente_dni"));
+                t.setMatricula_veterinario(rs.getInt("matricula_veterinario"));
 
 
                 lista.add(t);
