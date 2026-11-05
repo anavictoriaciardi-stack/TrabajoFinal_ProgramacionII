@@ -13,7 +13,7 @@ public class ClienteDAO {
     }
 
     // 1. INSERTAR CLIENTE
-    public void insertar(Cliente cliente) {
+    public void insertar(Cliente cliente)throws SQLException {
         String sql = "INSERT INTO cliente (dni, nombre, apellido, telefono, email, domicilio) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBDD.conectar();
@@ -29,13 +29,11 @@ public class ClienteDAO {
             ps.executeUpdate();
             System.out.println("Cliente insertado correctamente.");
 
-        } catch (SQLException e) {
-            System.err.println("Error al insertar cliente: " + e.getMessage());
         }
     }
 
     // 2. OBTENER TODOS LOS CLIENTES
-    public List<Cliente> listarClientes() {
+    public List<Cliente> listarClientes() throws SQLException{
         List<Cliente> lista = new ArrayList<>();
         String sql = "SELECT * FROM cliente";
 
@@ -54,14 +52,12 @@ public class ClienteDAO {
 
                 lista.add(c);
             }
-        } catch (SQLException e) {
-            System.err.println("Error al listar clientes: " + e.getMessage());
         }
         return lista;
     }
 
     // 3. ELIMINAR CLIENTE POR DNI
-    public void eliminar(String dni) {
+    public void eliminar(String dni)throws SQLException {
         String sql = "DELETE FROM cliente WHERE dni = ?";
 
         try (Connection conn = ConexionBDD.conectar();
@@ -71,8 +67,6 @@ public class ClienteDAO {
             ps.executeUpdate();
             System.out.println("Cliente eliminado correctamente.");
 
-        } catch (SQLException e) {
-            System.err.println("Error al eliminar cliente: " + e.getMessage());
         }
     }
 }
