@@ -77,6 +77,14 @@ public class Mascota {
         this.edad = edad;
     }
 
+    public String getCliente_dni() {
+        return cliente_dni;
+    }
+
+    public void setCliente_dni(String cliente_dni) {
+        this.cliente_dni = cliente_dni;
+    }
+
     //metodo toString
 
     @Override
