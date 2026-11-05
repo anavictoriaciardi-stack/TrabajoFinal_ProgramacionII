@@ -10,26 +10,29 @@ public class Mascota {
     private String especie;
     private String raza;
     private int edad;
+    private String cliente_dni;
     private List <Consulta> historialClinico;
 
     //Constructores
     public Mascota() {
     }
 
-    public Mascota(String nombre, String especie, String raza, int edad, List<Consulta> historialClinico) {
+    public Mascota(String nombre, String especie, String raza, int edad, List<Consulta> historialClinico, String cliente_dni) {
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
         this.edad = edad;
-        this.historialClinico = historialClinico;
+        this.cliente_dni=cliente_dni;
+        this.historialClinico = new ArrayList<>();
     }
     //Este es solo para el metodo DAO listar
-    public Mascota(int id, String nombre, String especie, String raza, int edad) {
+    public Mascota(int id, String nombre, String especie, String raza, int edad, String cliente_dni) {
         this.id = id;
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
         this.edad = edad;
+        this.cliente_dni=cliente_dni;
         this.historialClinico = new ArrayList<>();
     }
 
