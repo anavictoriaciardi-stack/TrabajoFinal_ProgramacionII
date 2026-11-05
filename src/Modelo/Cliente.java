@@ -2,16 +2,12 @@ package Modelo;
 
 import java.util.Objects;
 
-//Clase Cliente. Hereda de Persona. Va a ser el tipo de objeto que va a servir como referente para guardar datos
+//Clase Cliente. Hereda de Persona.
 public class Cliente extends Persona{
     private String domicilio;
 
     //Constructores de la clase
     public Cliente() {
-    }
-
-    public Cliente(String dni, String nombre, String apellido, String telefono, String email) {
-        super(dni, nombre, apellido, telefono, email);
     }
 
     public Cliente(String dni, String nombre, String apellido, String telefono, String email, String domicilio) {
