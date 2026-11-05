@@ -16,6 +16,14 @@ public class Mascota {
     public Mascota() {
     }
 
+    public Mascota(String nombre, String especie, String raza, int edad, List<Consulta> historialClinico) {
+        this.nombre = nombre;
+        this.especie = especie;
+        this.raza = raza;
+        this.edad = edad;
+        this.historialClinico = historialClinico;
+    }
+    //Este es solo para el metodo DAO listar
     public Mascota(int id, String nombre, String especie, String raza, int edad) {
         this.id = id;
         this.nombre = nombre;

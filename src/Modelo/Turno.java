@@ -24,7 +24,7 @@ public class Turno {
         this.dni_cliente = dni_cliente;
         this.matricula_veterinario = matricula_veterinario;
     }
-
+    //Este es solo para el metodo DAO listar
     public Turno(int ID, LocalDate fecha, LocalTime hora, double costo, String dni_cliente, int matricula_veterinario) {
         this.ID = ID;
         this.fecha = fecha;
