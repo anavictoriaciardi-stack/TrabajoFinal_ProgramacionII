@@ -1,9 +1,11 @@
 package Modelo;
 
+import Interfaces.Identificable_Interface;
+
 import java.util.Objects;
 
 //Clase Cliente. Hereda de Persona.
-public class Cliente extends Persona{
+public class Cliente extends Persona implements Identificable_Interface {
     private String domicilio;
 
     //Constructores de la clase
@@ -52,5 +54,12 @@ public class Cliente extends Persona{
     @Override
     public int hashCode() {
         return Objects.hash(getDni());
+    }
+
+    // Implementacion Interfaz
+
+    @Override
+    public String identificador() {
+        return "Idenficador de la clase: DNI Nro: "+getDni();
     }
 }

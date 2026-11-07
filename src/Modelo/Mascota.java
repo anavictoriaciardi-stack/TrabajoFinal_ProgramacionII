@@ -1,10 +1,12 @@
 package Modelo;
 
+import Interfaces.Identificable_Interface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Mascota {
+public class Mascota implements Identificable_Interface {
     private int id;
     private String nombre;
     private String especie;
@@ -115,5 +117,11 @@ public class Mascota {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    //Implemetacion Interfaz
+    @Override
+    public String identificador() {
+        return "denficador de la clase: ID Nro: " + getId();
     }
 }
