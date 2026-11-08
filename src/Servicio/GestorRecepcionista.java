@@ -192,6 +192,7 @@ public class GestorRecepcionista {
     }
     //CobrarConsulta
 
+    /// ---------- SALA DE ESPERA ---------- ///
     //AgregaraSaladeEspera
     //EliminarSaladeEspera
     //MostrarSaladeEspera

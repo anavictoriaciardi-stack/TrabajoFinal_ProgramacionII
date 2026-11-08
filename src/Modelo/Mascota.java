@@ -19,7 +19,7 @@ public class Mascota implements Identificable_Interface {
     public Mascota() {
     }
 
-    public Mascota(String nombre, String especie, String raza, int edad, List<Consulta> historialClinico, String cliente_dni) {
+    public Mascota(String nombre, String especie, String raza, int edad, String cliente_dni) {
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
