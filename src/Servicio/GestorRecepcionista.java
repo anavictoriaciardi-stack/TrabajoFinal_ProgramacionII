@@ -36,7 +36,7 @@ public class GestorRecepcionista {
         this.clientes = new HashSet<>();
         this.consultas = new HashSet<>();
     }
-
+    ///---------- TURNOS ---------- ///
     ///AñadirTurno
     public void agregarTurno (Turno turno){
         try {
@@ -103,7 +103,7 @@ public class GestorRecepcionista {
             System.out.println(" ");
         }
     }
-    ///CLIENTE///
+    /// ---------- CLIENTE ---------- ///
     ///AñadirCliente
     public void agregarCliente (Cliente cliente){
         try {
@@ -179,8 +179,17 @@ public class GestorRecepcionista {
         }
 
     }
-
+/// ---------- CONSULTA ---------- ///
     ///buscarConsulta
+    public double buscarCostoTurno (int id) {
+            listarTurnos();
+            for (Turno t: turnos) {
+                if (t.getID() == id) {
+                    return t.getCosto();
+                }
+            }
+            return -1;
+    }
     //CobrarConsulta
 
     //AgregaraSaladeEspera
