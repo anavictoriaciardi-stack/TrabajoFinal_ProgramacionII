@@ -57,16 +57,34 @@ public class ClienteDAO {
     }
 
     // 3. ELIMINAR CLIENTE POR DNI
-    public void eliminar(String dni)throws SQLException {
+    public boolean eliminar(String dni)throws SQLException {
         String sql = "DELETE FROM cliente WHERE dni = ?";
 
         try (Connection conn = ConexionBDD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, dni);
-            ps.executeUpdate();
-            System.out.println("Cliente eliminado correctamente.");
+            return  ps.executeUpdate()> 0;
+
 
         }
+    }
+
+    // modificar contacto del cliente
+
+    public boolean modificar(int id,String telefono)throws SQLException{
+        String sql= " UPDATE clientes SET telefono= ? WHERE id= ?";
+
+        try(Connection con= ConexionBDD.conectar();
+       PreparedStatement ps= con.prepareStatement(sql) ){
+
+            ps.setString(1,telefono);
+            ps.setInt(2,id);
+
+          return  ps.executeUpdate()> 0;
+
+        }
+
+
     }
 }
