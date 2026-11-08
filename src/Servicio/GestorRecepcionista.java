@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+
+///Definicion de atributos
 public class GestorRecepcionista {
     private ClienteDAO dao_cliente;
     private TurnoDAO dao_turno;
@@ -23,6 +25,7 @@ public class GestorRecepcionista {
     private Set <Cliente> clientes;
     private Set <Consulta> consultas;
 
+    ///Constructor
     public GestorRecepcionista() {
         this.dao_cliente = new ClienteDAO();
         this.dao_turno = new TurnoDAO();
@@ -35,7 +38,7 @@ public class GestorRecepcionista {
     }
 
     ///AñadirTurno
-    public void AgregarTurno (Turno turno){
+    public void agregarTurno (Turno turno){
         try {
             dao_turno.insertar(turno);
             turnos.add(turno);
@@ -45,8 +48,8 @@ public class GestorRecepcionista {
         }
     }
     ///EliminarTurno
-    public void EliminarTurno(int id) {
-        boolean encontro = BuscarTurno(id);
+    public void eliminarTurno(int id) {
+        boolean encontro = buscarTurno(id);
         if (encontro) {
             try {
                 dao_turno.eliminar(id);
@@ -59,18 +62,17 @@ public class GestorRecepcionista {
     }
     //ModificarTurno
     ///BuscarTurno
-    public boolean BuscarTurno (int id){
-        ListarTurnos();
-        Boolean encontro = false;
+    public boolean buscarTurno (int id){
+        listarTurnos();
         for (Turno t: turnos) {
             if (t.getID() == id) {
-                encontro = true;
+                return true;
             }
         }
-        return encontro;
+        return false;
     }
-    ///ListarTurnos solo para listar
-    public void ListarTurnos (){
+    ///ListarTurnos
+    public void listarTurnos (){
         try {
             turnos.clear();
             turnos.addAll(dao_turno.listarTurnos());
@@ -79,15 +81,16 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarTurnos
-    public void MostrarTurnos (){
-        ListarTurnos();
+    public void mostrarTurnos (){
+        listarTurnos();
         for (Turno t: turnos){
             System.out.println(t);
+            System.out.println("--------------------------------------------");
         }
     }
     ///MostrarUnTurno
-    public void MostrarUnTurno (int id) {
-        boolean encontrar = BuscarTurno(id);
+    public void mostrarUnTurno (int id) {
+        boolean encontrar = buscarTurno(id);
         if (encontrar) {
             for (Turno t : turnos) {
                 if (t.getID() == id) {
@@ -100,13 +103,82 @@ public class GestorRecepcionista {
             System.out.println(" ");
         }
     }
-
+    ///CLIENTE///
     ///AñadirCliente
+    public void agregarCliente (Cliente cliente){
+        try {
+            dao_cliente.insertar(cliente);
+            clientes.add(cliente);
+            System.out.println(" El cliente se agregó correctamente -");
+        } catch (SQLException e){
+            System.out.println("Error al agregar el cliente. "+ e.getMessage());
+        }
+    }
     ///EliminarCliente
-    ///ModificarClientes
+    public void eliminarClientes (String dni){
+        boolean encontro = buscarCliente(dni);
+        if (encontro) {
+            try {
+                dao_cliente.eliminar(dni);
+                clientes.removeIf( c-> c.getDni().equals(dni));
+                System.out.println("Cliente eliminado correctamente");
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar Cliente. " + e.getMessage());
+            }
+        }
+    }
+    //ModificarClientes
     ///ListarCLientes
+    public void listarClientes (){
+        try {
+            clientes.clear();
+            clientes.addAll(dao_cliente.listarClientes());
+        } catch (SQLException e) {
+            System.out.println("Error al listar los clientes. "+e.getMessage());;
+        }
+    }
     ///BuscarCliente
+    public boolean buscarCliente (String dni){
+        listarClientes();
+        for (Cliente c: clientes){
+            if (c.getDni().equals(dni)){
+                return true;
+            }
+        }
+        return false;
+    }
+    ///MostrarClientes
+    public void mostrarClientes(){
+        listarClientes();
+        for (Cliente c: clientes){
+            System.out.println(c);
+            System.out.println("--------------------------------------------");
+        }
+    }
+    ///MostrarunCliente
+    public void mostrarUnCliente (String dni){
+        listarClientes();
+        for (Cliente c: clientes){
+            if (c.getDni().equals(dni)){
+                System.out.println(c);
+            }
+        }
+    }
     ///MostrarMascotasxCliente
+    public void mostrarMascotasxCliente (String dni){
+        try {
+            mascotas.clear();
+            mascotas.addAll(dao_mascotas.listarMascotas());
+            for (Mascota m: mascotas){
+                if (m.getCliente_dni().equals(dni)){
+                    System.out.println(m);
+                }
+            }
+        } catch (SQLException e){
+            System.out.println("Error al listar mascotas."+e.getMessage());
+        }
+
+    }
 
     ///buscarConsulta
     //CobrarConsulta
