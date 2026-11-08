@@ -1,6 +1,7 @@
 package Persistencia;
 
 import Conexion.ConexionBDD;
+import Excepciones.ClienteNoEncontradoException;
 import Modelo.Cliente;
 
 import java.sql.*;
@@ -55,6 +56,37 @@ public class ClienteDAO {
         }
         return lista;
     }
+    // buscar cliente pod DNI
+
+    public Cliente buscarPorDni(String dni) throws ClienteNoEncontradoException, SQLException {
+        String sql = "SELECT dni, nombre, apellido, telefono, email, domicilio FROM cliente WHERE dni = ?";
+
+        try (Connection con = ConexionBDD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            // Seteamos el parámetro del DNI de manera segura contra SQL Injection
+            ps.setString(1, dni);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Mapeamos los datos de la base de datos al objeto Cliente
+                    Cliente cliente = new Cliente();
+                    cliente.setDni(rs.getString("dni"));
+                    cliente.setNombre(rs.getString("nombre"));
+                    cliente.setApellido(rs.getString("apellido"));
+                    cliente.setTelefono(rs.getString("telefono"));
+                    cliente.setEmail(rs.getString("email"));
+                    cliente.setDomicilio(rs.getString("domicilio"));
+
+                    return cliente;
+                }
+            }
+        }
+
+        // Si el ResultSet no arrojó resultados, lanzamos la excepción personalizada
+        throw new ClienteNoEncontradoException("No se encontró ningún cliente registrado con el DNI: " + dni);
+    }
+
 
     // 3. ELIMINAR CLIENTE POR DNI
     public boolean eliminar(String dni)throws SQLException {
