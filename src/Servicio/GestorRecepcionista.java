@@ -1,5 +1,6 @@
 package Servicio;
 
+import Excepciones.TurnoInexistenteException;
 import Modelo.Cliente;
 import Modelo.Consulta;
 import Modelo.Mascota;
@@ -89,7 +90,7 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarUnTurno
-    public void mostrarUnTurno (int id) {
+    public void mostrarUnTurno (int id)throws TurnoInexistenteException {
         boolean encontrar = buscarTurno(id);
         if (encontrar) {
             for (Turno t : turnos) {
@@ -99,8 +100,10 @@ public class GestorRecepcionista {
             }
         }
         else {
+
             //crear excepcion que diga que no se encontro/no existe
-            System.out.println(" ");
+            throw new TurnoInexistenteException(" no hay un turno disponible con ese ID.");
+
         }
     }
     /// ---------- CLIENTE ---------- ///
