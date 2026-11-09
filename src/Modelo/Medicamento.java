@@ -25,4 +25,8 @@ public class Medicamento {
         this.precio = precio;
     }
 
+    @Override
+    public String toString() {
+        return "MEDICAMENTO= Nombre: "+ nombre + " Precio: " + precio;
+    }
 }

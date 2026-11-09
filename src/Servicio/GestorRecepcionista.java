@@ -9,6 +9,7 @@ import Persistencia.*;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -196,7 +197,7 @@ public class GestorRecepcionista {
             }
             return -1;
     }
-    ///CobrarConsulta
+    ///CobrarConsultaSola
     public void cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
 
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
@@ -211,6 +212,7 @@ public class GestorRecepcionista {
         System.out.println(factura);
 
     }
+    ///Cobrar consulta con Medicamentos
     public void cobrarTurnoConMedicamentos(Turno t, double monto, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
 
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
@@ -226,13 +228,49 @@ public class GestorRecepcionista {
         System.out.println(resultado);
         System.out.println("Factura generada correctamente.");
         System.out.println(factura);
+    }
+    ///CobrarMedicamentos
+    public void cobrarMedicamentos(String dni, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
 
+        Cliente cliente = dao_cliente.buscarPorDni(dni);
+        Factura factura = new Factura(cliente,0,formaPago);
+        for (Medicamento m: medicamentos){
+            factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
+        }
+        String resultado = factura.procesarPago(factura.getMontoTotal(), formaPago);
+
+        dao_factura.insertar(factura);
+
+        System.out.println(resultado);
+        System.out.println("Factura generada correctamente.");
+        System.out.println(factura);
     }
 
     /// ---------- SALA DE ESPERA ---------- ///
 
-    //AgregaraSaladeEspera
-    //EliminarSaladeEspera
+    ///AgregaraSaladeEspera
+    public void AgregarSaladeEspera(Map<Integer, SaladeEspera> mapa, int id, SaladeEspera sala) {
+        if (!mapa.containsKey(id)) {
+            mapa.put(id, sala);
+            System.out.println("Paciente esperando");
+        } else {
+            System.out.println("Ya existe un paciente esperando con ese ID");
+        }
+    }
+    ///EliminarSaladeEspera
+    public void EliminarSaladeEspera(Map<Integer, SaladeEspera> mapa, int id) {
+        if (!mapa.containsKey(id)) {
+            mapa.remove(id);
+            System.out.println("El paciente se fue");
+        } else {
+            System.out.println("No existe una sala de espera con ese ID");
+        }
+    }
     //MostrarSaladeEspera
-
+    public void mostrarSalasDeEspera(Map<Integer, SaladeEspera> mapa) {
+        for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
+            System.out.println("ID: " + entrada.getKey());
+            System.out.println(entrada.getValue());
+        }
+    }
 }
