@@ -84,6 +84,7 @@ public class UsuarioDAO {
         return usuarios;
     }
 
+
     /// modificar usuario
 
     /// en este no hace falta pasarle otra vez el id del usuario
