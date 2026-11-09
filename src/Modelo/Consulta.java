@@ -1,11 +1,9 @@
 package Modelo;
 
-import Interfaces.Identificable_Interface;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Consulta implements Identificable_Interface {
+public class Consulta {
     private int ID;
     private int mascota_id;
     private int matricula_veterinario;
@@ -129,10 +127,5 @@ public class Consulta implements Identificable_Interface {
     @Override
     public int hashCode() {
         return Objects.hash(getID());
-    }
-    //Implemetacion Interfaz
-    @Override
-    public String identificador() {
-        return "denficador de la clase: ID Nro: " + getID();
     }
 }

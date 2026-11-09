@@ -1,11 +1,9 @@
 package Modelo;
 
-import Interfaces.Identificable_Interface;
-
 import java.util.Objects;
 
 //Clase Veterinario. Hereda de Persona.
-public class Veterinario extends Persona implements Identificable_Interface {
+public class Veterinario extends Persona {
     private int matricula;
     private String especialidad;
 
@@ -63,12 +61,5 @@ public class Veterinario extends Persona implements Identificable_Interface {
     @Override
     public int hashCode() {
         return Objects.hash(getMatricula());
-    }
-
-    //Implementacion Interfaz
-
-    @Override
-    public String identificador() {
-        return "denficador de la clase: Matricula Nro: " + getMatricula();
     }
 }

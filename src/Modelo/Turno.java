@@ -1,13 +1,11 @@
 package Modelo;
 
-import Interfaces.Identificable_Interface;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 //Clase turno
-public class Turno implements Identificable_Interface {
+public class Turno{
     private int ID;
     private LocalDate fecha;
     private LocalTime hora;
@@ -116,11 +114,5 @@ public class Turno implements Identificable_Interface {
     @Override
     public int hashCode() {
         return Objects.hash(getID());
-    }
-
-    //Implemetacion Interfaz
-    @Override
-    public String identificador() {
-        return "denficador de la clase: ID Nro: " + getID();
     }
 }

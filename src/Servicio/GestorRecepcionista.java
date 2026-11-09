@@ -18,24 +18,20 @@ public class GestorRecepcionista {
     private ClienteDAO dao_cliente;
     private TurnoDAO dao_turno;
     private MascotaDAO dao_mascotas;
-    private ConsultaDAO dao_consulta;
     private FacturaDAO dao_factura;
     private Set <Mascota> mascotas;
     private Set <Turno> turnos;
     private Set <Cliente> clientes;
-    private Set <Consulta> consultas;
 
     ///Constructor
     public GestorRecepcionista() {
         this.dao_cliente = new ClienteDAO();
         this.dao_turno = new TurnoDAO();
         this.dao_mascotas = new MascotaDAO();
-        this.dao_consulta = new ConsultaDAO();
         this.dao_factura= new FacturaDAO();
         this.mascotas = new HashSet<>();
         this.turnos = new HashSet<>();
         this.clientes = new HashSet<>();
-        this.consultas = new HashSet<>();
     }
     ///---------- TURNOS ---------- ///
     ///AñadirTurno
@@ -187,16 +183,6 @@ public class GestorRecepcionista {
 
     }
 /// ---------- CONSULTA ---------- ///
-    ///buscarConsulta
-    public double buscarCostoTurno (int id) {
-            listarTurnos();
-            for (Turno t: turnos) {
-                if (t.getID() == id) {
-                    return t.getCosto();
-                }
-            }
-            return -1;
-    }
     ///CobrarConsultaSola
     public void cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
 
@@ -209,6 +195,7 @@ public class GestorRecepcionista {
 
         System.out.println(resultado);
         System.out.println("Factura generada correctamente.");
+        eliminarTurno(t.getID());
         System.out.println(factura);
 
     }
@@ -266,7 +253,7 @@ public class GestorRecepcionista {
             System.out.println("No existe una sala de espera con ese ID");
         }
     }
-    //MostrarSaladeEspera
+    ///MostrarSaladeEspera
     public void mostrarSalasDeEspera(Map<Integer, SaladeEspera> mapa) {
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             System.out.println("ID: " + entrada.getKey());
