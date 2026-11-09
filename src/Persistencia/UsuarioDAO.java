@@ -1,6 +1,7 @@
 package Persistencia;
 
 import Conexion.ConexionBDD;
+import Modelo.Cliente;
 import Modelo.TIPOdeUSUARIO;
 import Modelo.Usuario;
 
@@ -8,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
 
@@ -55,6 +58,30 @@ public class UsuarioDAO {
             return filasAfectadas > 0;
 
         }
+    }
+
+    public List <Usuario> listar()throws SQLException{
+
+        String sql= " SELECT * FROM usuarios";
+        List<Usuario> usuarios= new ArrayList<>();
+
+        try(Connection con= ConexionBDD.conectar();
+        PreparedStatement ps= con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()){
+
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String username = rs.getString("nombre_usuario");
+                String password = rs.getString("password");
+                String rolStr = rs.getString("rol");
+                TIPOdeUSUARIO rol = TIPOdeUSUARIO.valueOf(rolStr.toUpperCase());
+
+                Usuario user= new Usuario(id,username,password,rol);
+
+                usuarios.add(user);
+            }
+        }
+        return usuarios;
     }
 
     /// modificar usuario
