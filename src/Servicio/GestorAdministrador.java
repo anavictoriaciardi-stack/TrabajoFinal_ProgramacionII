@@ -53,7 +53,7 @@ public class GestorAdministrador {
         }
     }
     ///ModificarVetrinariveterinario
-    public void modificar (int matricula, String especialidad){
+    public void modificarVeterinario(int matricula, String especialidad){
         boolean encontro = buscarVeterinario(matricula);
         if (encontro) {
             try {
@@ -96,7 +96,6 @@ public class GestorAdministrador {
 
         }
     }
-
     ///BuscarVetrinario
     public boolean buscarVeterinario (int matricula){
         listarVeterinarios();
@@ -110,7 +109,7 @@ public class GestorAdministrador {
 
     /// ---------- CONTABILIDAD ---------- ///
     ///Verfacturas
-        public void VerFacturas () throws SQLException{
+    public void VerFacturas () throws SQLException{
             facturas.addAll(dao_facturas.listarActivas());
             for (Factura f: facturas){
                 System.out.println(f);
@@ -121,7 +120,7 @@ public class GestorAdministrador {
         dao_facturas.actualizar(factura);
         facturas.addAll(dao_facturas.listarActivas());
     }
-    // Dar de baja una factura
+    /// Dar de baja una factura
     public void darDeBaja(int id) throws SQLException {
         Factura factura = null;
         for (Factura f : facturas) {
@@ -137,7 +136,7 @@ public class GestorAdministrador {
     }
 
     /// ---------- CREACION DE USUARIOS ---------- ///
-
+    ///Crear Usuario
     public boolean CrearUsuario (Usuario usuario){
             try {
                 listarUsuarios();
@@ -164,6 +163,7 @@ public class GestorAdministrador {
             }
         return true;
         }
+    ///Listar Usuario
     public void listarUsuarios(){
         try {
             usuarios.clear();
@@ -172,6 +172,7 @@ public class GestorAdministrador {
             System.out.println("Error al listar los Usuarios" + e.getMessage());
         }
     }
+    ///Eliminar Usuario
     public void eliminarUsuario (int id){
         boolean encontro = buscarVeterinario(id);
         if (encontro) {
@@ -184,6 +185,7 @@ public class GestorAdministrador {
             }
         }
     }
+    ///Modificar Usuario
     public void modificarUsuario (Usuario usuario){
         boolean encontro = buscarUsuario(usuario.getId());
         if (encontro) {
@@ -195,6 +197,7 @@ public class GestorAdministrador {
             }
         }
     }
+    ///Buscar Usuario
     public boolean buscarUsuario (int id){
         listarUsuarios();
         for (Usuario c: usuarios) {

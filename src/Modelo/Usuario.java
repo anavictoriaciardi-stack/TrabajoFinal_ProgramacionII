@@ -82,6 +82,6 @@ public class Usuario {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(getId(),getUsername(), getPassword());
     }
 }
