@@ -12,10 +12,7 @@ public class GestorAdministrador {
     ///ListarVetrinarios
     ///BuscarVetrinario
 
-    /// ---------- CAJA y CONTABILIDAD ---------- ///
-    ///VerCaja
-    ///Backup de Información
-    ///RegistrarCompras
-    ///PagarSueldos
-
+    /// ---------- CONTABILIDAD ---------- ///
+    ///Verfacturas
+    ///VerInformacióndeVeterinaria
 }
