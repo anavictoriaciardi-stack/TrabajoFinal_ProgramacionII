@@ -63,7 +63,23 @@ public class ConsultaDAO {
         return lista;
     }
 
-    // 3. ELIMINAR CONSULTA POR ID
+    //3. MODIFICAR CONSULTA POR ID
+
+    public boolean modificarConsulta(int id, String nuevoTratamiento, String nuevaReceta)throws SQLException{
+
+        String sql= "UPDATE consulta SET tratamiento=?, SET receta =? WHERE id= ?";
+        try(Connection con= ConexionBDD.conectar();
+        PreparedStatement ps= con.prepareStatement(sql)){
+
+            ps.setString(1,nuevoTratamiento);
+            ps.setString(2,nuevaReceta);
+            ps.setInt(3,id);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    // 4. ELIMINAR CONSULTA POR ID
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM consulta WHERE id = ?";
 

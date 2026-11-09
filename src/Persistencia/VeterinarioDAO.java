@@ -47,6 +47,20 @@ public class VeterinarioDAO {
         return lista;
     }
 
+    // modificar veterinario
+
+    public boolean modificar(int matricula, String especialidad)throws SQLException{
+
+        String sql= " UPDATE veterinario SET especialidad WHERE id= ?";
+
+        try(Connection con= ConexionBDD.conectar();
+        PreparedStatement ps= con.prepareStatement(sql)){
+
+            ps.setString(1,especialidad);
+            ps.setInt(2,matricula);
+            return ps.executeUpdate() > 0;
+        }
+    }
     //eliminar veterinario por matricula
 
     // ELIMINAR VETERINARIO POR MATRÍCULA

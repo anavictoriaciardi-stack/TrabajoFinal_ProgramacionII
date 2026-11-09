@@ -50,4 +50,35 @@ public class MascotaDAO {
         }
         return lista;
     }
+    //MODIFICAR MASCOTA
+    public boolean modificarMascota(int id, String nuevoNombre,String especieNueva, String nuevaRaza, int Edadnueva)throws SQLException{
+
+        String sql=" UPDATE mascota SET nombre=?, SET especie=?, SET raza=?, SET edad=? WHERE ID= ?";
+
+        try(Connection con= ConexionBDD.conectar();
+        PreparedStatement ps= con.prepareStatement(sql)) {
+
+            ps.setString(1,nuevoNombre);
+            ps.setString(2,especieNueva);
+            ps.setString(3,nuevaRaza);
+            ps.setInt(4,Edadnueva);
+            ps.setInt(5,id);
+
+            return ps.executeUpdate() > 0;
+        }
+
+    }
+
+    //ELIMINAR MASCOTA
+    public boolean eliminarMascota(int id)throws SQLException{
+        String sql= " DELETE FROM mascota WHERE id=?";
+
+        try(Connection con = ConexionBDD.conectar();
+        PreparedStatement ps = con.prepareStatement(sql)){
+
+            ps.setInt(1,id);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
 }
