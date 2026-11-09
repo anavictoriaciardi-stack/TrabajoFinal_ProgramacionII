@@ -2,16 +2,12 @@ package Servicio;
 
 import Excepciones.ClienteNoEncontradoException;
 import Excepciones.TurnoInexistenteException;
-import Modelo.Cliente;
-import Modelo.Consulta;
-import Modelo.Mascota;
-import Modelo.Turno;
-import Persistencia.ClienteDAO;
-import Persistencia.ConsultaDAO;
-import Persistencia.MascotaDAO;
-import Persistencia.TurnoDAO;
+import Interfaces.PagoInvalidoException;
+import Modelo.*;
+import Persistencia.*;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +18,7 @@ public class GestorRecepcionista {
     private TurnoDAO dao_turno;
     private MascotaDAO dao_mascotas;
     private ConsultaDAO dao_consulta;
+    private FacturaDAO dao_factura;
     private Set <Mascota> mascotas;
     private Set <Turno> turnos;
     private Set <Cliente> clientes;
@@ -34,6 +31,7 @@ public class GestorRecepcionista {
         this.dao_turno = new TurnoDAO();
         this.dao_mascotas = new MascotaDAO();
         this.dao_consulta = new ConsultaDAO();
+        this.dao_factura= new FacturaDAO();
         this.mascotas = new HashSet<>();
         this.turnos = new HashSet<>();
         this.clientes = new HashSet<>();
@@ -130,7 +128,6 @@ public class GestorRecepcionista {
             }
         }
     }
-    // agregarle el metodo de buscar cliente por DNI
     //ModificarClientes
     ///ListarCLientes
     public void listarClientes (){
@@ -141,8 +138,6 @@ public class GestorRecepcionista {
             System.out.println("Error al listar los clientes. "+e.getMessage());;
         }
     }
-
-    // aca le falta llamar al dao de cliente q tiene el metodo
     ///BuscarCliente
     public boolean buscarCliente (String dni){
         listarClientes();
@@ -202,7 +197,21 @@ public class GestorRecepcionista {
             }
             return -1;
     }
-    //CobrarConsulta
+    ///CobrarConsulta
+    public void cobrarConsulta(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+
+        Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
+        Factura factura = new Factura(cliente,0,formaPago);
+        factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
+        String resultado = factura.procesarPago(monto, formaPago);
+        
+        dao_factura.insertar(factura);
+
+        System.out.println(resultado);
+        System.out.println("Factura generada correctamente.");
+        System.out.println(factura);
+
+    }
 
     /// ---------- SALA DE ESPERA ---------- ///
     //AgregaraSaladeEspera

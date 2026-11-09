@@ -26,6 +26,14 @@ public class Factura implements iPagable {
         this.formaPago = formaPago;
         this.activo = true;
     }
+    public Factura(Cliente cliente,  double montoTotal, String formaPago) {
+        this.fechaHora = LocalDateTime.now();
+        this.cliente = cliente;
+        this.items = items;
+        this.montoTotal = montoTotal;
+        this.formaPago = formaPago;
+        this.activo = true;
+    }
 
 
     public Factura() {
