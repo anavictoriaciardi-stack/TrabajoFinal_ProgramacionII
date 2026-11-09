@@ -1,5 +1,6 @@
 package Servicio;
 
+import Modelo.Consulta;
 import Modelo.Mascota;
 import Modelo.Veterinario;
 import Persistencia.VeterinarioDAO;
@@ -71,6 +72,22 @@ public class GestorAdministrador {
             System.out.println("--------------------------------------------");
         }
     }
+    ///mostrarunvetrinario
+    public void mostrarUnVeterinario (int matricula) {
+        boolean encontrar = buscarVeterinario(matricula);
+        if (encontrar) {
+            for (Veterinario v : veterinarios) {
+                if (v.getMatricula() == matricula) {
+                    System.out.println(v);
+                }
+            }
+        }
+        else {
+            System.out.println("No hay Veterinario con esa Matricula");
+
+        }
+    }
+
     ///BuscarVetrinario
     public boolean buscarVeterinario (int matricula){
         listarVeterinarios();
@@ -84,6 +101,6 @@ public class GestorAdministrador {
 
     /// ---------- CONTABILIDAD ---------- ///
     ///Verfacturas
-
+        
     ///VerInformacióndeVeterinaria
 }
