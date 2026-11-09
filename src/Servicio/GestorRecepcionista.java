@@ -27,6 +27,7 @@ public class GestorRecepcionista {
     private Set <Cliente> clientes;
     private Set <Consulta> consultas;
 
+    //faltaria agregarle facturaDAO, creo
     ///Constructor
     public GestorRecepcionista() {
         this.dao_cliente = new ClienteDAO();
@@ -129,6 +130,7 @@ public class GestorRecepcionista {
             }
         }
     }
+    // agregarle el metodo de buscar cliente por DNI
     //ModificarClientes
     ///ListarCLientes
     public void listarClientes (){
@@ -139,6 +141,8 @@ public class GestorRecepcionista {
             System.out.println("Error al listar los clientes. "+e.getMessage());;
         }
     }
+
+    // aca le falta llamar al dao de cliente q tiene el metodo
     ///BuscarCliente
     public boolean buscarCliente (String dni){
         listarClientes();
