@@ -255,7 +255,18 @@ public class GestorRecepcionista {
         System.out.println("Factura generada correctamente.");
         System.out.println(factura);
     }
+    /// ---------- VETERINARIO ------------ ///
+    public void listaryMostrarVeterinarios () throws SQLException{
+        List <Veterinario> veterinarios = new ArrayList<>();
+        VeterinarioDAO dao_veterinario = new VeterinarioDAO();
+        veterinarios.addAll(dao_veterinario.listarVeterinarios());
 
+        for (Veterinario v: veterinarios){
+            System.out.println("Nombre: " + v.getNombre() + " "+ v.getApellido());
+            System.out.println("Matricula: "+ v.getMatricula());
+            System.out.println("----------------------------------------------------------");
+        }
+    }
     /// ---------- SALA DE ESPERA ---------- ///
 
     ///AgregaraSaladeEspera
@@ -281,6 +292,15 @@ public class GestorRecepcionista {
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             System.out.println("ID: " + entrada.getKey());
             System.out.println(entrada.getValue());
+        }
+    }
+    ///MostrarPorVeterinarioxVeterinario
+    public void mostrarSalaxVeterinario(int matricula) {
+        for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
+            if (entrada.getValue().getMatriculaVet() == matricula) {
+                System.out.println("ID: " + entrada.getKey());
+                System.out.println(entrada.getValue());
+            }
         }
     }
     ///HacerPasar
