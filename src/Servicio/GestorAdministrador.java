@@ -1,10 +1,8 @@
 package Servicio;
 
-import Modelo.Consulta;
-import Modelo.Factura;
-import Modelo.Mascota;
-import Modelo.Veterinario;
+import Modelo.*;
 import Persistencia.FacturaDAO;
+import Persistencia.UsuarioDAO;
 import Persistencia.VeterinarioDAO;
 
 import java.sql.SQLException;
@@ -14,14 +12,19 @@ import java.util.Set;
 public class GestorAdministrador {
     private VeterinarioDAO dao_veterinario;
     private FacturaDAO dao_facturas;
+    private UsuarioDAO dao_usuarios;
     private Set <Veterinario> veterinarios;
     private Set <Factura> facturas;
+    private Set <Usuario> usuarios;
 
     public GestorAdministrador() {
         this.dao_veterinario = new VeterinarioDAO();
         this.dao_facturas = new FacturaDAO();
+        this.dao_usuarios= new UsuarioDAO();
         this.veterinarios = new HashSet<>();
         this.facturas = new HashSet<>();
+        this.usuarios= new HashSet<>();
+
     }
 
     /// ---------- VETERINARIOS ---------- ///
@@ -133,4 +136,60 @@ public class GestorAdministrador {
         }
     }
 
-}
+    /// ---------- CREACION DE USUARIOS ---------- ///
+
+    public int CrearUsuario (Usuario usuario){
+            try {
+                listarUsuarios();
+                for (Usuario u: usuarios){
+                    if (u.getUsername().equals(usuario.getUsername())){
+                        System.out.println("Usuario ya existe.");
+                        return -1;
+                    }
+                    else {
+                        if (u.getPassword().equals(usuario.getPassword())){
+                            System.out.println("Contraseña Invalida");
+                            return -1;
+                        }
+                        else{
+                            dao_usuarios.insertar(usuario);
+                            usuarios.add(usuario);
+                            System.out.println(" El Usuario de veterinario se agregó correctamente -");
+                        }
+                    }
+                }
+
+            } catch (SQLException e){
+                System.out.println("Error al agregar el usuario. "+ e.getMessage());
+            }
+        }
+    public void listarUsuarios(){
+        try {
+            usuarios.clear();
+           // usuarios.addAll(dao_usuarios.Listar());
+        } catch (SQLException e) {
+            System.out.println("Error al listar los Usuarios" + e.getMessage());
+        }
+    }
+    public void eliminarUsuario (int id){
+        boolean encontro = buscarVeterinario(matricula);
+        if (encontro) {
+            try {
+                dao_veterinario.eliminar(matricula);
+                veterinarios.removeIf(v -> v.getMatricula() == matricula);
+                System.out.println("Turno eliminado correctamente");
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar turno. " + e.getMessage());
+            }
+        }
+    }
+    public void BuscarUsuario (int id){
+        listarUsuarios();
+        for (Usuario c: usuarios) {
+            if (v.getMatricula() == matricula) {
+                return true;
+            }
+        }
+        return false;
+    }
+    }
