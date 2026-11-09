@@ -285,16 +285,12 @@ public class GestorRecepcionista {
     }
     ///HacerPasar
     public void hacerPasar(int matricula) {
-        Iterator<Map.Entry<Integer, SaladeEspera>> iterador = mapa.entrySet().iterator();
-
-        while (iterador.hasNext()) {
-            Map.Entry<Integer, SaladeEspera> entrada = iterador.next();
-
+        for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             if (entrada.getValue().getMatriculaVet() == matricula) {
                 System.out.println("Paciente que pasa a consulta:");
                 System.out.println(entrada.getValue());
 
-                iterador.remove();
+                EliminarSaladeEspera(entrada.getKey());
                 return;
             }
         }
