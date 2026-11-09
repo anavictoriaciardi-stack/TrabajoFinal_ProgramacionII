@@ -21,6 +21,7 @@ public class GestorRecepcionista {
     private Set <Mascota> mascotas;
     private Set <Turno> turnos;
     private Set <Cliente> clientes;
+    private Map<Integer, SaladeEspera> mapa;
 
     ///Constructor
     public GestorRecepcionista() {
@@ -31,6 +32,7 @@ public class GestorRecepcionista {
         this.mascotas = new HashSet<>();
         this.turnos = new HashSet<>();
         this.clientes = new HashSet<>();
+        this.mapa= new HashMap<>();
     }
     ///---------- TURNOS ---------- ///
     ///AñadirTurno
@@ -234,6 +236,7 @@ public class GestorRecepcionista {
 
         System.out.println(resultado);
         System.out.println("Factura generada correctamente.");
+        eliminarTurno(t.getID());
         System.out.println(factura);
     }
     ///CobrarMedicamentos
@@ -256,7 +259,7 @@ public class GestorRecepcionista {
     /// ---------- SALA DE ESPERA ---------- ///
 
     ///AgregaraSaladeEspera
-    public void AgregarSaladeEspera(Map<Integer, SaladeEspera> mapa, int id, SaladeEspera sala) {
+    public void AgregarSaladeEspera(int id, SaladeEspera sala) {
         if (!mapa.containsKey(id)) {
             mapa.put(id, sala);
             System.out.println("Paciente esperando");
@@ -265,8 +268,8 @@ public class GestorRecepcionista {
         }
     }
     ///EliminarSaladeEspera
-    public void EliminarSaladeEspera(Map<Integer, SaladeEspera> mapa, int id) {
-        if (!mapa.containsKey(id)) {
+    public void EliminarSaladeEspera(int id) {
+        if (mapa.containsKey(id)) {
             mapa.remove(id);
             System.out.println("El paciente se fue");
         } else {
@@ -274,10 +277,28 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarSaladeEspera
-    public void mostrarSalasDeEspera(Map<Integer, SaladeEspera> mapa) {
+    public void mostrarSalasDeEspera() {
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             System.out.println("ID: " + entrada.getKey());
             System.out.println(entrada.getValue());
         }
+    }
+    ///HacerPasar
+    public void hacerPasar(int matricula) {
+        Iterator<Map.Entry<Integer, SaladeEspera>> iterador = mapa.entrySet().iterator();
+
+        while (iterador.hasNext()) {
+            Map.Entry<Integer, SaladeEspera> entrada = iterador.next();
+
+            if (entrada.getValue().getMatriculaVet() == matricula) {
+                System.out.println("Paciente que pasa a consulta:");
+                System.out.println(entrada.getValue());
+
+                iterador.remove();
+                return;
+            }
+        }
+
+        System.out.println("No hay pacientes esperando para ese veterinario.");
     }
 }

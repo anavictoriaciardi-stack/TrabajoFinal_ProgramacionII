@@ -113,7 +113,6 @@ public class GestorVeterinario {
         }
         return false;
     }
-
     ///---------- CONSULTA ---------- ///
     ///AñadirConsulta
     public void agregarConsulta (Consulta consulta){
@@ -202,10 +201,15 @@ public class GestorVeterinario {
         }
         return false;
     }
-
-    /// ---------- ATENCION ---------- ///
-    ///VerHistorialClinico
-    /// AtenderPaciente /*eliminar de sala de espera y String llamandolo.*/
+    ///MostrarHistorialClinico
+    public void historialClinico (int IDmascota){
+        listarConsultas();
+        for (Consulta c : consultas){
+            if (c.getMascota_id() == IDmascota){
+                System.out.println(c);
+            }
+        }
+    }
 
 
 }
