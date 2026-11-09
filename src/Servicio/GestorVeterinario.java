@@ -79,12 +79,14 @@ public class GestorVeterinario {
         }
     }
     ///MostrarUnaMascota
-    public void mostrarUnaMascota (int id)throws TurnoInexistenteException {
-        boolean encontrar = buscarMascota(id);
+    public void mostrarUnaMascota (String dni, String nombre)throws TurnoInexistenteException {
+        boolean encontrar = buscarMascotaxdniyNombre(dni, nombre);
         if (encontrar) {
             for (Mascota m : mascotas) {
-                if (m.getId() == id) {
-                    System.out.println(m);
+                if (m.getCliente_dni().equals(dni)) {
+                    if (m.getNombre().equals(nombre)){
+                        System.out.println(m);
+                    }
                 }
             }
         }
@@ -104,11 +106,13 @@ public class GestorVeterinario {
         return false;
     }
     ///BuscarMascotaxDni
-    public boolean buscarMascotaxdni (String dni){
+    public boolean buscarMascotaxdniyNombre (String dni, String nombre){
         listarMascotas();
         for (Mascota m: mascotas) {
-            if (m.getCliente_dni() == dni) {
-                return true;
+            if (m.getCliente_dni().equals(dni)) {
+                if (m.getNombre().equals(nombre)){
+                    return true;
+                }
             }
         }
         return false;
@@ -178,6 +182,21 @@ public class GestorVeterinario {
         }
         else {
             System.out.println("No hay consulta con ese id");
+
+        }
+    }
+    ///MostraConsultasporfecha
+    public void mostrarConsultasporFecha (LocalDateTime fecha) {
+        boolean encontrar = buscarConsultaxFecha(fecha);
+        if (encontrar) {
+            for (Consulta c : consultas) {
+                if (c.getFecha() == fecha) {
+                    System.out.println(c);
+                }
+            }
+        }
+        else {
+            System.out.println("No hay consulta con esa fecha");
 
         }
     }
