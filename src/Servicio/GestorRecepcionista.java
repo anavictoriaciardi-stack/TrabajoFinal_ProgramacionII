@@ -7,8 +7,8 @@ import Modelo.*;
 import Persistencia.*;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -24,7 +24,6 @@ public class GestorRecepcionista {
     private Set <Cliente> clientes;
     private Set <Consulta> consultas;
 
-    //faltaria agregarle facturaDAO, creo
     ///Constructor
     public GestorRecepcionista() {
         this.dao_cliente = new ClienteDAO();
@@ -198,13 +197,30 @@ public class GestorRecepcionista {
             return -1;
     }
     ///CobrarConsulta
-    public void cobrarConsulta(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+    public void cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
 
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
         Factura factura = new Factura(cliente,0,formaPago);
         factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
         String resultado = factura.procesarPago(monto, formaPago);
-        
+
+        dao_factura.insertar(factura);
+
+        System.out.println(resultado);
+        System.out.println("Factura generada correctamente.");
+        System.out.println(factura);
+
+    }
+    public void cobrarTurnoConMedicamentos(Turno t, double monto, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+
+        Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
+        Factura factura = new Factura(cliente,0,formaPago);
+        factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
+        for (Medicamento m: medicamentos){
+            factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
+        }
+        String resultado = factura.procesarPago(monto, formaPago);
+
         dao_factura.insertar(factura);
 
         System.out.println(resultado);
@@ -214,6 +230,7 @@ public class GestorRecepcionista {
     }
 
     /// ---------- SALA DE ESPERA ---------- ///
+
     //AgregaraSaladeEspera
     //EliminarSaladeEspera
     //MostrarSaladeEspera
