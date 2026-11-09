@@ -64,7 +64,7 @@ public class TurnoDAO {
 
     // MODIFICAR TURNO POR ID
 
-    public boolean modificarTurno(int id, String fecha, String hora)throws SQLException{
+    public boolean modificarTurno(int id, Date fecha, Time hora)throws SQLException{
 
         String sql= " UPDATE Turnos set fecha= ?, SET hora= ? WHERE id= ?";
 
@@ -72,8 +72,8 @@ public class TurnoDAO {
         PreparedStatement ps= con.prepareStatement(sql)) {
 
 
-            ps.setDate(1,Date.valueOf(fecha));
-            ps.setTime(2,Time.valueOf(hora));
+            ps.setDate(1,fecha);
+            ps.setTime(2,hora);
             ps.setInt(3,id);
 
             return ps.executeUpdate() > 0;

@@ -7,10 +7,9 @@ import Modelo.*;
 import Persistencia.*;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.*;
 
 
 ///Definicion de atributos
@@ -57,12 +56,33 @@ public class GestorRecepcionista {
             }
         }
     }
-    //ModificarTurno
-    ///BuscarTurno
+    ///ModificarTurno
+    public void modificarTurno (int id, Date fecha, Time hora){
+        boolean encontro = buscarTurno(id);
+        if (encontro) {
+            try {
+                dao_turno.modificarTurno(id,fecha,hora);
+                listarTurnos();
+            } catch (SQLException e) {
+                System.out.println("Error al modificar el turno. "+e.getMessage());
+            }
+        }
+    }
+    ///BuscarTurnoxID
     public boolean buscarTurno (int id){
         listarTurnos();
         for (Turno t: turnos) {
             if (t.getID() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    ///buscarTurnoxdni
+    public boolean buscarTurnoxdni (String dni){
+        listarTurnos();
+        for (Turno t: turnos) {
+            if (t.getDni_cliente() == dni) {
                 return true;
             }
         }
