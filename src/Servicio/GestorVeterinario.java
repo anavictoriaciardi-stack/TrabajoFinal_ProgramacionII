@@ -3,13 +3,12 @@ package Servicio;
 import Excepciones.TurnoInexistenteException;
 import Modelo.Consulta;
 import Modelo.Mascota;
-import Modelo.Turno;
 import Persistencia.ConsultaDAO;
 import Persistencia.MascotaDAO;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class GestorVeterinario {
         }
     }
     ///EliminarMascota
-    public void eliminarMAscota(int id) {
+    public void eliminarMascota(int id) {
         boolean encontro = buscarMascota(id);
         if (encontro) {
             try {
@@ -68,7 +67,7 @@ public class GestorVeterinario {
             mascotas.clear();
             mascotas.addAll(dao_mascota.listarMascotas());
         } catch (SQLException e) {
-            System.out.println("Error al listar el mensaje" + e.getMessage());
+            System.out.println("Error al listar las mascotas" + e.getMessage());
         }
     }
     ///MostrarMascotas
@@ -117,11 +116,92 @@ public class GestorVeterinario {
 
     ///---------- CONSULTA ---------- ///
     ///AñadirConsulta
+    public void agregarConsulta (Consulta consulta){
+        try {
+            dao_consulta.insertar(consulta);
+            consultas.add(consulta);
+            System.out.println(" La consulta se agregó correctamente -");
+        } catch (SQLException e){
+            System.out.println("Error al agregar la consulta. "+ e.getMessage());
+        }
+    }
     ///EliminarConsulta
-    //ModificarConsulta
+    public void eliminarConsulta(int id) {
+        boolean encontro = buscarConsulta(id);
+        if (encontro) {
+            try {
+                dao_consulta.eliminar(id);
+                mascotas.removeIf(t -> t.getId() == id);
+                System.out.println("Consulta eliminada correctamente");
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar la consulta. " + e.getMessage());
+            }
+        }
+    }
+    ///ModificarConsulta
+    public void modificarConsulta (int id, String nuevoTratamiento, String nuevaReceta){
+        boolean encontro = buscarMascota(id);
+        if (encontro) {
+            try {
+                dao_consulta.modificarConsulta(id, nuevoTratamiento, nuevaReceta);
+                listarConsultas();
+            } catch (SQLException e) {
+                System.out.println("Error al modificar la consulta. "+e.getMessage());
+            }
+        }
+    }
     ///ListarConsultas
+    public void listarConsultas (){
+        try {
+            consultas.clear();
+            consultas.addAll(dao_consulta.listarConsultas());
+        } catch (SQLException e) {
+            System.out.println("Error al listar las consultas" + e.getMessage());
+        }
+    }
     ///MostrarConsultas
+    public void mostrarConsultas (){
+        listarConsultas();
+        for (Consulta c: consultas){
+            System.out.println(c);
+            System.out.println("--------------------------------------------");
+        }
+    }
+    ///MostrarunaConsulta
+    public void mostrarUnaConsulta (int id) {
+        boolean encontrar = buscarConsulta(id);
+        if (encontrar) {
+            for (Consulta c : consultas) {
+                if (c.getID() == id) {
+                    System.out.println(c);
+                }
+            }
+        }
+        else {
+            System.out.println("No hay consulta con ese id");
+
+        }
+    }
+    ///BuscarConsultaxfecha
+    public boolean buscarConsultaxFecha (LocalDateTime fecha){
+        listarConsultas();
+        for (Consulta c: consultas) {
+            if (c.getFecha() == fecha) {
+                return true;
+            }
+        }
+        return false;
+    }
     ///BuscarConsulta
+    public boolean buscarConsulta (int id){
+        listarConsultas();
+        for (Consulta c: consultas) {
+            if (c.getID() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /// ---------- ATENCION ---------- ///
     ///VerHistorialClinico

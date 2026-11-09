@@ -106,11 +106,11 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarUnTurno
-    public void mostrarUnTurno (int id)throws TurnoInexistenteException {
-        boolean encontrar = buscarTurno(id);
+    public void mostrarUnTurno (String dni)throws TurnoInexistenteException {
+        boolean encontrar = buscarTurnoxdni(dni);
         if (encontrar) {
             for (Turno t : turnos) {
-                if (t.getID() == id) {
+                if (t.getDni_cliente() == dni) {
                     System.out.println(t);
                 }
             }
