@@ -1,5 +1,6 @@
 package Servicio;
 
+import Excepciones.ClienteNoEncontradoException;
 import Excepciones.TurnoInexistenteException;
 import Modelo.Cliente;
 import Modelo.Consulta;
@@ -100,8 +101,6 @@ public class GestorRecepcionista {
             }
         }
         else {
-
-            //crear excepcion que diga que no se encontro/no existe
             throw new TurnoInexistenteException(" no hay un turno disponible con ese ID.");
 
         }
@@ -159,22 +158,28 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarunCliente
-    public void mostrarUnCliente (String dni){
+    public void mostrarUnCliente (String dni) throws ClienteNoEncontradoException {
         listarClientes();
         for (Cliente c: clientes){
             if (c.getDni().equals(dni)){
                 System.out.println(c);
             }
+            else {
+                throw new ClienteNoEncontradoException("No se encontro cliente con ese DNI para mostrar");
+            }
         }
     }
     ///MostrarMascotasxCliente
-    public void mostrarMascotasxCliente (String dni){
+    public void mostrarMascotasxCliente (String dni) throws ClienteNoEncontradoException{
         try {
             mascotas.clear();
             mascotas.addAll(dao_mascotas.listarMascotas());
             for (Mascota m: mascotas){
                 if (m.getCliente_dni().equals(dni)){
                     System.out.println(m);
+                }
+                else {
+                    throw new ClienteNoEncontradoException("No se encontro cliente con ese DNI para mostrar");
                 }
             }
         } catch (SQLException e){
