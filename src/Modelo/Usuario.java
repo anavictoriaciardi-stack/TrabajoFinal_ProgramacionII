@@ -15,10 +15,10 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public Usuario(String username, String password, TIPOdeUSUARIO rol) {
+    public Usuario(String username, String password) {
         Username = username;
         Password = password;
-        this.rol = rol;
+        this.rol = TIPOdeUSUARIO.VETERINARIO;
     }
 
     public Usuario() {
@@ -75,6 +75,13 @@ public class Usuario {
 
         Usuario otro = (Usuario) obj;
 
-        return Objects.equals(id, otro.id);
+        return Objects.equals(id, otro.id) &&
+                Objects.equals(Username, otro.Username) &&
+                Objects.equals(Password, otro.Password);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
