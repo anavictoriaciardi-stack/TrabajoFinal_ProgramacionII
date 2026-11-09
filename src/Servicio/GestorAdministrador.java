@@ -1,8 +1,10 @@
 package Servicio;
 
 import Modelo.Consulta;
+import Modelo.Factura;
 import Modelo.Mascota;
 import Modelo.Veterinario;
+import Persistencia.FacturaDAO;
 import Persistencia.VeterinarioDAO;
 
 import java.sql.SQLException;
@@ -11,11 +13,15 @@ import java.util.Set;
 
 public class GestorAdministrador {
     private VeterinarioDAO dao_veterinario;
+    private FacturaDAO dao_facturas;
     private Set <Veterinario> veterinarios;
+    private Set <Factura> facturas;
 
     public GestorAdministrador() {
         this.dao_veterinario = new VeterinarioDAO();
+        this.dao_facturas = new FacturaDAO();
         this.veterinarios = new HashSet<>();
+        this.facturas = new HashSet<>();
     }
 
     /// ---------- VETERINARIOS ---------- ///
@@ -101,6 +107,30 @@ public class GestorAdministrador {
 
     /// ---------- CONTABILIDAD ---------- ///
     ///Verfacturas
-        
-    ///VerInformacióndeVeterinaria
+        public void VerFacturas () throws SQLException{
+            facturas.addAll(dao_facturas.listarActivas());
+            for (Factura f: facturas){
+                System.out.println(f);
+            }
+        }
+    ///ModificarFactura
+    public void ModificarFactura(Factura factura) throws SQLException {
+        dao_facturas.actualizar(factura);
+        facturas.addAll(dao_facturas.listarActivas());
+    }
+    // Dar de baja una factura
+    public void darDeBaja(int id) throws SQLException {
+        Factura factura = null;
+        for (Factura f : facturas) {
+            if (f.getId() == id) {
+                factura = f;
+                break;
+            }
+        }
+        if (factura != null) {
+            dao_facturas.darDeBaja(id);
+            facturas.remove(factura);
+        }
+    }
+
 }
