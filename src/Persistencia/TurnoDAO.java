@@ -6,6 +6,7 @@ import Modelo.Veterinario;
 import Conexion.ConexionBDD;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,24 @@ public class TurnoDAO {
             }
         }
         return lista;
+    }
+
+    // MODIFICAR TURNO POR ID
+
+    public boolean modificarTurno(int id, String fecha, String hora)throws SQLException{
+
+        String sql= " UPDATE Turnos set fecha= ?, SET hora= ? WHERE id= ?";
+
+        try(Connection con= ConexionBDD.conectar();
+        PreparedStatement ps= con.prepareStatement(sql)) {
+
+
+            ps.setDate(1,Date.valueOf(fecha));
+            ps.setTime(2,Time.valueOf(hora));
+            ps.setInt(3,id);
+
+            return ps.executeUpdate() > 0;
+        }
     }
 
     // 3. ELIMINAR TURNO POR ID
