@@ -42,10 +42,10 @@ public class GestorVeterinario {
         if (encontro) {
             try {
                 dao_mascota.eliminarMascota(id);
-                mascotas.removeIf(t -> t.getId() == id);
+                mascotas.removeIf(m -> m.getId() == id);
                 System.out.println("Turno eliminado correctamente");
             } catch (SQLException e) {
-                System.out.println("Error al eliminar turno. " + e.getMessage());
+                System.out.println("Error al eliminar la mascota. " + e.getMessage());
             }
         }
     }
@@ -57,7 +57,7 @@ public class GestorVeterinario {
                 dao_mascota.modificarMascota(id, nuevoNombre, especieNueva, nuevaRaza, Edadnueva);
                 listarMascotas();
             } catch (SQLException e) {
-                System.out.println("Error al modificar el turno. "+e.getMessage());
+                System.out.println("Error al modificar la mascota. "+e.getMessage());
             }
         }
     }
@@ -91,7 +91,7 @@ public class GestorVeterinario {
             }
         }
         else {
-            throw new TurnoInexistenteException(" no hay un turno disponible con ese ID.");
+            throw new TurnoInexistenteException(" no hay uns mascota registrada bajo ese nombre y DNI.");
 
         }
     }
