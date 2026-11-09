@@ -138,18 +138,18 @@ public class GestorAdministrador {
 
     /// ---------- CREACION DE USUARIOS ---------- ///
 
-    public int CrearUsuario (Usuario usuario){
+    public boolean CrearUsuario (Usuario usuario){
             try {
                 listarUsuarios();
                 for (Usuario u: usuarios){
                     if (u.getUsername().equals(usuario.getUsername())){
                         System.out.println("Usuario ya existe.");
-                        return -1;
+                        return false;
                     }
                     else {
                         if (u.getPassword().equals(usuario.getPassword())){
                             System.out.println("Contraseña Invalida");
-                            return -1;
+                            return false;
                         }
                         else{
                             dao_usuarios.insertar(usuario);
@@ -162,31 +162,43 @@ public class GestorAdministrador {
             } catch (SQLException e){
                 System.out.println("Error al agregar el usuario. "+ e.getMessage());
             }
+        return true;
         }
     public void listarUsuarios(){
         try {
             usuarios.clear();
-           // usuarios.addAll(dao_usuarios.Listar());
+            usuarios.addAll(dao_usuarios.listar());
         } catch (SQLException e) {
             System.out.println("Error al listar los Usuarios" + e.getMessage());
         }
     }
     public void eliminarUsuario (int id){
-        boolean encontro = buscarVeterinario(matricula);
+        boolean encontro = buscarVeterinario(id);
         if (encontro) {
             try {
-                dao_veterinario.eliminar(matricula);
-                veterinarios.removeIf(v -> v.getMatricula() == matricula);
-                System.out.println("Turno eliminado correctamente");
+                dao_usuarios.eliminar(id);
+                usuarios.removeIf(u -> u.getId() == id);
+                System.out.println("Usuario eliminado correctamente");
             } catch (SQLException e) {
-                System.out.println("Error al eliminar turno. " + e.getMessage());
+                System.out.println("Error al eliminar el usuario. " + e.getMessage());
             }
         }
     }
-    public void BuscarUsuario (int id){
+    public void modificarUsuario (Usuario usuario){
+        boolean encontro = buscarUsuario(usuario.getId());
+        if (encontro) {
+            try {
+                dao_usuarios.modificarUsuario(usuario);
+                listarUsuarios();
+            } catch (SQLException e) {
+                System.out.println("Error al modificar el Usuario. "+e.getMessage());
+            }
+        }
+    }
+    public boolean buscarUsuario (int id){
         listarUsuarios();
         for (Usuario c: usuarios) {
-            if (v.getMatricula() == matricula) {
+            if (c.getId() == id) {
                 return true;
             }
         }
