@@ -69,6 +69,7 @@ public class MascotaDAO {
 
     }
 
+
     //ELIMINAR MASCOTA
     public boolean eliminarMascota(int id)throws SQLException{
         String sql= " DELETE FROM mascota WHERE id=?";

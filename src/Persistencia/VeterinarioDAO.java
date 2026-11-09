@@ -61,7 +61,7 @@ public class VeterinarioDAO {
             return ps.executeUpdate() > 0;
         }
     }
-    //eliminar veterinario por matricula
+
 
     // ELIMINAR VETERINARIO POR MATRÍCULA
     public void eliminar(int matricula) throws SQLException{

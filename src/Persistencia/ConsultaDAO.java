@@ -63,6 +63,8 @@ public class ConsultaDAO {
         return lista;
     }
 
+
+
     //3. MODIFICAR CONSULTA POR ID
 
     public boolean modificarConsulta(int id, String nuevoTratamiento, String nuevaReceta)throws SQLException{
