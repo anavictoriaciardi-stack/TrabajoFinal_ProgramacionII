@@ -27,39 +27,55 @@ public class GestorVeterinario {
 
     /// ---------- MASCOTAS ---------- ///
     ///AñadirMascota
-    public void agregarMascota (Mascota mascota){
+    public String agregarMascota (Mascota mascota){
+        String mensaje = "";
         try {
             dao_mascota.insertar(mascota);
             mascotas.add(mascota);
-            System.out.println(" La mascota se agregó correctamente -");
+            mensaje += " La mascota se agregó correctamente -";
         } catch (SQLException e){
-            System.out.println("Error al agregar la mascota. "+ e.getMessage());
+            mensaje += "Error al agregar la mascota. "+ e.getMessage();
         }
+        return mensaje;
     }
     ///EliminarMascota
-    public void eliminarMascota(int id) {
+    public String eliminarMascota(int id) {
         boolean encontro = buscarMascota(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_mascota.eliminarMascota(id);
                 mascotas.removeIf(m -> m.getId() == id);
-                System.out.println("Turno eliminado correctamente");
+                mensaje += "Mascota eliminado correctamente";
             } catch (SQLException e) {
                 System.out.println("Error al eliminar la mascota. " + e.getMessage());
             }
+        }else{
+            mensaje += "No se encontro la mascota";
         }
+        if(!mascotas.contains(buscarMascota(id))){
+            mensaje = "Se elimino correctamente la mascota";
+        }else{
+            mensaje += "\nNo se pudo eliminar la mascota";
+        }
+        return mensaje;
     }
     ///ModificarMascota
-    public void modificarMascota (int id, String nuevoNombre,String especieNueva, String nuevaRaza, int Edadnueva){
+    public String modificarMascota (int id, String nuevoNombre,String especieNueva, String nuevaRaza, int Edadnueva){
         boolean encontro = buscarMascota(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_mascota.modificarMascota(id, nuevoNombre, especieNueva, nuevaRaza, Edadnueva);
                 listarMascotas();
+                mensaje += "Mascota modificada";
             } catch (SQLException e) {
                 System.out.println("Error al modificar la mascota. "+e.getMessage());
             }
+        }else{
+            mensaje += "No se encontro la mascota";
         }
+        return mensaje;
     }
     ///ListarMascotas
     public void listarMascotas (){
@@ -71,21 +87,24 @@ public class GestorVeterinario {
         }
     }
     ///MostrarMascotas
-    public void mostrarMascotas (){
+    public String mostrarMascotas (){
         listarMascotas();
+        String mostrar = "";
         for (Mascota m: mascotas){
-            System.out.println(m);
-            System.out.println("--------------------------------------------");
+            mostrar += m.toString();
+            mostrar += "\n"+ "--------------------------------------------";
         }
+        return mostrar;
     }
     ///MostrarUnaMascota
-    public void mostrarUnaMascota (String dni, String nombre)throws TurnoInexistenteException {
+    public String mostrarUnaMascota (String dni, String nombre)throws TurnoInexistenteException {
         boolean encontrar = buscarMascotaxdniyNombre(dni, nombre);
+        String mostrar = "";
         if (encontrar) {
             for (Mascota m : mascotas) {
                 if (m.getCliente_dni().equals(dni)) {
                     if (m.getNombre().equals(nombre)){
-                        System.out.println(m);
+                        mostrar += m.toString();
                     }
                 }
             }
@@ -94,6 +113,7 @@ public class GestorVeterinario {
             throw new TurnoInexistenteException(" no hay uns mascota registrada bajo ese nombre y DNI.");
 
         }
+        return mostrar;
     }
     ///BuscarMascotaxId
     public boolean buscarMascota (int id){
@@ -119,39 +139,59 @@ public class GestorVeterinario {
     }
     ///---------- CONSULTA ---------- ///
     ///AñadirConsulta
-    public void agregarConsulta (Consulta consulta){
+    public String agregarConsulta (Consulta consulta){
+        String mensaje = "";
         try {
             dao_consulta.insertar(consulta);
             consultas.add(consulta);
-            System.out.println(" La consulta se agregó correctamente -");
+            if(consultas.contains(consulta)){
+                mensaje += "Se agrego la consulta correctamente";
+            }else{
+                mensaje += "No se pudo agregar la consulta";
+            }
         } catch (SQLException e){
-            System.out.println("Error al agregar la consulta. "+ e.getMessage());
+            mensaje += "Error al agregar la consulta. "+ e.getMessage();
+        }finally{
+            return mensaje;
         }
     }
     ///EliminarConsulta
-    public void eliminarConsulta(int id) {
+    public String eliminarConsulta(int id) {
         boolean encontro = buscarConsulta(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_consulta.eliminar(id);
-                mascotas.removeIf(t -> t.getId() == id);
-                System.out.println("Consulta eliminada correctamente");
+                consultas.removeIf(t -> t.getID() == id);
+                if(consultas.contains(buscarMascota(id))){
+                    mensaje += "Consulta no se pudo eliminar";
+                }else{
+                    mensaje += "Se pudo eliminar la consulta";
+                }
             } catch (SQLException e) {
-                System.out.println("Error al eliminar la consulta. " + e.getMessage());
+                mensaje += "Error al eliminar la consulta. " + e.getMessage();
             }
+        }else{
+            mensaje += "No se pudo encontrar la consulta";
         }
+        return mensaje;
     }
     ///ModificarConsulta
-    public void modificarConsulta (int id, String nuevoTratamiento, String nuevaReceta){
+    public String modificarConsulta (int id, String nuevoTratamiento, String nuevaReceta){
         boolean encontro = buscarMascota(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_consulta.modificarConsulta(id, nuevoTratamiento, nuevaReceta);
                 listarConsultas();
+                mensaje += "Consulta Modificada correctamente";
             } catch (SQLException e) {
                 System.out.println("Error al modificar la consulta. "+e.getMessage());
             }
+        }else{
+            mensaje += "No se pudo encontrar la consulta";
         }
+        return mensaje;
     }
     ///ListarConsultas
     public void listarConsultas (){
@@ -163,42 +203,47 @@ public class GestorVeterinario {
         }
     }
     ///MostrarConsultas
-    public void mostrarConsultas (){
+    public String mostrarConsultas (){
         listarConsultas();
+        String  mostrar = "";
         for (Consulta c: consultas){
-            System.out.println(c);
-            System.out.println("--------------------------------------------");
+            mostrar += c.toString();
+            mostrar += "--------------------------------------------";
         }
+        return mostrar;
     }
     ///MostrarunaConsulta
-    public void mostrarUnaConsulta (int id) {
+    public String mostrarUnaConsulta (int id) {
         boolean encontrar = buscarConsulta(id);
+        String mostrar = "";
         if (encontrar) {
             for (Consulta c : consultas) {
                 if (c.getID() == id) {
-                    System.out.println(c);
+                    mostrar += c.toString();
                 }
             }
         }
         else {
-            System.out.println("No hay consulta con ese id");
-
+            mostrar += "No hay consulta con ese id";
         }
+        return mostrar;
     }
     ///MostraConsultasporfecha
-    public void mostrarConsultasporFecha (LocalDateTime fecha) {
+    public String mostrarConsultasporFecha (LocalDateTime fecha) {
         boolean encontrar = buscarConsultaxFecha(fecha);
+        String mostrar = "";
         if (encontrar) {
             for (Consulta c : consultas) {
                 if (c.getFecha() == fecha) {
-                    System.out.println(c);
+                    mostrar += c;
                 }
             }
         }
         else {
-            System.out.println("No hay consulta con esa fecha");
+            mostrar += "No hay consulta con esa fecha";
 
         }
+        return mostrar;
     }
     ///BuscarConsultaxfecha
     public boolean buscarConsultaxFecha (LocalDateTime fecha){
@@ -221,14 +266,17 @@ public class GestorVeterinario {
         return false;
     }
     ///MostrarHistorialClinico
-    public void historialClinico (int IDmascota){
+    public String historialClinico (int IDmascota){
         listarConsultas();
+        String mensaje = "";
         for (Consulta c : consultas){
             if (c.getMascota_id() == IDmascota){
-                System.out.println(c);
+                mensaje += c.toString();
             }
         }
+        return mensaje;
     }
 
 
 }
+
