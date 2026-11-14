@@ -36,39 +36,52 @@ public class GestorRecepcionista {
     }
     ///---------- TURNOS ---------- ///
     ///AñadirTurno
-    public void agregarTurno (Turno turno){
+    public String agregarTurno (Turno turno){
+        String mensaje = "";
         try {
             dao_turno.insertar(turno);
             turnos.add(turno);
-            System.out.println(" El turno se agregó correctamente -");
+            mensaje = " El turno se agregó correctamente -";
         } catch (SQLException e){
-            System.out.println("Error al agregar el turno. "+ e.getMessage());
+            mensaje = "Error al agregar el turno. "+ e.getMessage();
         }
+        return mensaje;
     }
     ///EliminarTurno
-    public void eliminarTurno(int id) {
+    public String eliminarTurno(int id) {
         boolean encontro = buscarTurno(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_turno.eliminar(id);
                 turnos.removeIf(t -> t.getID() == id);
-                System.out.println("Turno eliminado correctamente");
+                mensaje = "Turno eliminado correctamente";
             } catch (SQLException e) {
-                System.out.println("Error al eliminar turno. " + e.getMessage());
+                mensaje = "Error al eliminar turno. " + e.getMessage();
+            }finally{
+                return mensaje;
             }
+        }else{
+            mensaje = "Turno no encontrado";
         }
+        return mensaje;
     }
     ///ModificarTurno
-    public void modificarTurno (int id, Date fecha, Time hora){
+    public String modificarTurno (int id, Date fecha, Time hora){
+        String mensaje = "";
         boolean encontro = buscarTurno(id);
         if (encontro) {
             try {
                 dao_turno.modificarTurno(id,fecha,hora);
                 listarTurnos();
+                mensaje =  "Turno Modificado correctamente";
             } catch (SQLException e) {
-                System.out.println("Error al modificar el turno. "+e.getMessage());
+                mensaje = "Error al modificar el turno. "+e.getMessage();
             }
+        }else{
+            mensaje = "Turno no encontrado";
         }
+        return mensaje;
     }
     ///BuscarTurnoxID
     public boolean buscarTurno (int id){
@@ -100,20 +113,23 @@ public class GestorRecepcionista {
         }
     }
     ///MostrarTurnos
-    public void mostrarTurnos (){
+    public String mostrarTurnos (){
         listarTurnos();
+        String mensaje = "";
         for (Turno t: turnos){
-            System.out.println(t);
-            System.out.println("--------------------------------------------");
+            mensaje += t.toString();
+            mensaje += "--------------------------------------------";
         }
+        return mensaje;
     }
     ///MostrarUnTurno
-    public void mostrarUnTurno (String dni)throws TurnoInexistenteException {
+    public String mostrarUnTurno (String dni)throws TurnoInexistenteException {
         boolean encontrar = buscarTurnoxdni(dni);
+        String mensaje = "";
         if (encontrar) {
             for (Turno t : turnos) {
                 if (t.getDni_cliente() == dni) {
-                    System.out.println(t);
+                    mensaje = t.toString();
                 }
             }
         }
@@ -121,29 +137,45 @@ public class GestorRecepcionista {
             throw new TurnoInexistenteException(" no hay un turno disponible con ese ID.");
 
         }
+        return mensaje;
     }
     /// ---------- CLIENTE ---------- ///
     ///AñadirCliente
-    public void agregarCliente (Cliente cliente){
+    public String agregarCliente (Cliente cliente){
+        String mensaje = "";
         try {
             dao_cliente.insertar(cliente);
             clientes.add(cliente);
-            System.out.println(" El cliente se agregó correctamente -");
+
+            if(clientes.contains(cliente)){
+                mensaje += " El cliente se agregó correctamente -";
+            }else{
+                mensaje += " El cliente no se agrego correctamente -";
+            }
         } catch (SQLException e){
-            System.out.println("Error al agregar el cliente. "+ e.getMessage());
+            mensaje += "Error al agregar el cliente. "+ e.getMessage();
         }
+        return mensaje;
     }
     ///EliminarCliente
-    public void eliminarClientes (String dni){
+    public boolean eliminarClientes (String dni){
         boolean encontro = buscarCliente(dni);
+
         if (encontro) {
             try {
                 dao_cliente.eliminar(dni);
                 clientes.removeIf( c-> c.getDni().equals(dni));
-                System.out.println("Cliente eliminado correctamente");
+
             } catch (SQLException e) {
                 System.out.println("Error al eliminar Cliente. " + e.getMessage());
             }
+        }else{
+            return false;
+        }
+        if(clientes.contains(buscarCliente(dni))){
+            return true;
+        }else{
+            return false;
         }
     }
     //ModificarClientes
@@ -167,47 +199,52 @@ public class GestorRecepcionista {
         return false;
     }
     ///MostrarClientes
-    public void mostrarClientes(){
+    public String mostrarClientes(){
         listarClientes();
+        String mensaje = "";
         for (Cliente c: clientes){
-            System.out.println(c);
-            System.out.println("--------------------------------------------");
+            mensaje += c.toString();
+            mensaje += "--------------------------------------------";
         }
+        return mensaje;
     }
     ///MostrarunCliente
-    public void mostrarUnCliente (String dni) throws ClienteNoEncontradoException {
+    public String mostrarUnCliente (String dni) throws ClienteNoEncontradoException {
         listarClientes();
+        String mensaje = "";
         for (Cliente c: clientes){
             if (c.getDni().equals(dni)){
-                System.out.println(c);
+                mensaje = c.toString();
             }
             else {
                 throw new ClienteNoEncontradoException("No se encontro cliente con ese DNI para mostrar");
             }
         }
+        return mensaje;
     }
     ///MostrarMascotasxCliente
-    public void mostrarMascotasxCliente (String dni) throws ClienteNoEncontradoException{
+    public String mostrarMascotasxCliente (String dni) throws ClienteNoEncontradoException{
+        String mensaje = "";
         try {
             mascotas.clear();
             mascotas.addAll(dao_mascotas.listarMascotas());
             for (Mascota m: mascotas){
                 if (m.getCliente_dni().equals(dni)){
-                    System.out.println(m);
+                    mensaje = m.toString();
                 }
                 else {
                     throw new ClienteNoEncontradoException("No se encontro cliente con ese DNI para mostrar");
                 }
             }
         } catch (SQLException e){
-            System.out.println("Error al listar mascotas."+e.getMessage());
+            mensaje = "Error al listar mascotas."+e.getMessage();
         }
-
+        return mensaje;
     }
-/// ---------- CONSULTA ---------- ///
+    /// ---------- CONSULTA ---------- ///
     ///CobrarConsultaSola
-    public void cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
-
+    public String cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+        String mostrarFactura = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
         Factura factura = new Factura(cliente,0,formaPago);
         factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
@@ -215,15 +252,15 @@ public class GestorRecepcionista {
 
         dao_factura.insertar(factura);
 
-        System.out.println(resultado);
-        System.out.println("Factura generada correctamente.");
-        eliminarTurno(t.getID());
-        System.out.println(factura);
-
+        mostrarFactura += resultado;
+        mostrarFactura = "Factura generada correctamente.";
+        mostrarFactura += eliminarTurno(t.getID());
+        mostrarFactura += factura.toString();
+        return mostrarFactura;
     }
     ///Cobrar consulta con Medicamentos
-    public void cobrarTurnoConMedicamentos(Turno t, double monto, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
-
+    public String cobrarTurnoConMedicamentos(Turno t, double monto, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+        String mostrar = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
         Factura factura = new Factura(cliente,0,formaPago);
         factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
@@ -234,14 +271,16 @@ public class GestorRecepcionista {
 
         dao_factura.insertar(factura);
 
-        System.out.println(resultado);
-        System.out.println("Factura generada correctamente.");
-        eliminarTurno(t.getID());
-        System.out.println(factura);
+        mostrar += resultado;
+        mostrar = "Factura generada correctamente.";
+        mostrar += eliminarTurno(t.getID());
+        mostrar += factura.toString();
+
+        return mostrar;
     }
     ///CobrarMedicamentos
-    public void cobrarMedicamentos(String dni, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
-
+    public String cobrarMedicamentos(String dni, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
+        String mostrar = "";
         Cliente cliente = dao_cliente.buscarPorDni(dni);
         Factura factura = new Factura(cliente,0,formaPago);
         for (Medicamento m: medicamentos){
@@ -251,70 +290,82 @@ public class GestorRecepcionista {
 
         dao_factura.insertar(factura);
 
-        System.out.println(resultado);
-        System.out.println("Factura generada correctamente.");
-        System.out.println(factura);
+        mostrar += resultado;
+        mostrar += "Factura generada correctamente.";
+        mostrar += factura.toString();
+        return mostrar;
     }
     /// ---------- VETERINARIO ------------ ///
-    public void listaryMostrarVeterinarios () throws SQLException{
+    public String listaryMostrarVeterinarios () throws SQLException{
         List <Veterinario> veterinarios = new ArrayList<>();
         VeterinarioDAO dao_veterinario = new VeterinarioDAO();
         veterinarios.addAll(dao_veterinario.listarVeterinarios());
-
+        String mostrar = "";
         for (Veterinario v: veterinarios){
-            System.out.println("Nombre: " + v.getNombre() + " "+ v.getApellido());
-            System.out.println("Matricula: "+ v.getMatricula());
-            System.out.println("----------------------------------------------------------");
+            mostrar += "Nombre: " + v.getNombre() + " "+ v.getApellido();
+            mostrar += "Matricula: "+ v.getMatricula();
+            mostrar += "----------------------------------------------------------";
         }
+        return mostrar;
     }
     /// ---------- SALA DE ESPERA ---------- ///
 
     ///AgregaraSaladeEspera
-    public void AgregarSaladeEspera(int id, SaladeEspera sala) {
+    public String AgregarSaladeEspera(int id, SaladeEspera sala) {
+        String mostrar = "";
         if (!mapa.containsKey(id)) {
             mapa.put(id, sala);
-            System.out.println("Paciente esperando");
+            mostrar += "Paciente esperando";
         } else {
-            System.out.println("Ya existe un paciente esperando con ese ID");
+            mostrar += "Ya existe un paciente esperando con ese ID";
         }
+        return mostrar;
     }
     ///EliminarSaladeEspera
-    public void EliminarSaladeEspera(int id) {
+    public String EliminarSaladeEspera(int id) {
+        String mensaje = "";
         if (mapa.containsKey(id)) {
             mapa.remove(id);
-            System.out.println("El paciente se fue");
+            mensaje += "El paciente se fue";
         } else {
-            System.out.println("No existe una sala de espera con ese ID");
+            mensaje += "No existe una sala de espera con ese ID";
         }
+        return mensaje;
     }
     ///MostrarSaladeEspera
-    public void mostrarSalasDeEspera() {
+    public String mostrarSalasDeEspera() {
+        String mostrar = "";
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
-            System.out.println("ID: " + entrada.getKey());
-            System.out.println(entrada.getValue());
+            mostrar += "ID: " + entrada.getKey();
+            mostrar += entrada.getValue().toString();
         }
+        return mostrar;
     }
     ///MostrarPorVeterinarioxVeterinario
-    public void mostrarSalaxVeterinario(int matricula) {
+    public String mostrarSalaxVeterinario(int matricula) {
+        String mostrar = "";
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             if (entrada.getValue().getMatriculaVet() == matricula) {
-                System.out.println("ID: " + entrada.getKey());
-                System.out.println(entrada.getValue());
+                mostrar +="ID: " + entrada.getKey();
+                mostrar += entrada.getValue().toString();
             }
         }
+        return mostrar;
     }
     ///HacerPasar
-    public void hacerPasar(int matricula) {
+    public String hacerPasar(int matricula) {
+        String mensaje = "";
         for (Map.Entry<Integer, SaladeEspera> entrada : mapa.entrySet()) {
             if (entrada.getValue().getMatriculaVet() == matricula) {
-                System.out.println("Paciente que pasa a consulta:");
-                System.out.println(entrada.getValue());
+                mensaje+="Paciente que pasa a consulta:";
+                mensaje += entrada.getValue().toString();
 
                 EliminarSaladeEspera(entrada.getKey());
-                return;
+                return mensaje;
             }
         }
 
-        System.out.println("No hay pacientes esperando para ese veterinario.");
+        mensaje += "No hay pacientes esperando para ese veterinario.";
+        return mensaje;
     }
 }
