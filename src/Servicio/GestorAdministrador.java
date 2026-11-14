@@ -30,13 +30,27 @@ public class GestorAdministrador {
     /// ---------- VETERINARIOS ---------- ///
 
     ///AñadirVeterinario
-    public void agregarVeterinario (Veterinario vete){
-        try {
-            dao_veterinario.insertar(vete);
-            veterinarios.add(vete);
-            System.out.println(" El veterinario se agregó correctamente -");
-        } catch (SQLException e){
-            System.out.println("Error al agregar el veterinario. "+ e.getMessage());
+    public String agregarVeterinario (Veterinario vete) throws NullPointerException{
+        String mensaje = "";
+        try{
+
+            if (vete != null){
+                try {
+                    dao_veterinario.insertar(vete);
+                    veterinarios.add(vete);
+                    mensaje = "Se agrego el veterinario correctamente.";
+                } catch (SQLException e) {
+                    System.err.println("Error al agregar el veterinario. " + e.getMessage());
+                }
+            }else{
+                mensaje = "El veterinario no existe -";
+                throw new NullPointerException("El veterinario no existe -");
+            }
+        }catch(NullPointerException e){
+            mensaje += e.getMessage();
+            e.printStackTrace();
+        }finally{
+            return mensaje;
         }
     }
     ///EliminarVeterinario
