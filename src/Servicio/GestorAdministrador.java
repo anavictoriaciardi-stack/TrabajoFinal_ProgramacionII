@@ -54,8 +54,9 @@ public class GestorAdministrador {
         }
     }
     ///EliminarVeterinario
-    public void eliminarVeterinario(int matricula) {
+    public boolean eliminarVeterinario(int matricula) {
         boolean encontro = buscarVeterinario(matricula);
+
         if (encontro) {
             try {
                 dao_veterinario.eliminar(matricula);
@@ -64,7 +65,15 @@ public class GestorAdministrador {
             } catch (SQLException e) {
                 System.out.println("Error al eliminar turno. " + e.getMessage());
             }
+        }else{
+            throw new NullPointerException("El veterinario no existe -");
         }
+        if(veterinarios.contains(matricula)){
+            return true;
+        }else{
+            return false;
+        }
+
     }
     ///ModificarVetrinariveterinario
     public void modificarVeterinario(int matricula, String especialidad){
@@ -88,27 +97,29 @@ public class GestorAdministrador {
         }
     }
     ///mostrarVeterinarios
-    public void mostrarVeterinarios(){
+    public String mostrarVeterinarios(){
         listarVeterinarios();
+        String mensaje = "";
         for (Veterinario v: veterinarios){
-            System.out.println(v);
-            System.out.println("--------------------------------------------");
+            mensaje += v.toString();
         }
+        return mensaje;
     }
     ///mostrarunvetrinario
-    public void mostrarUnVeterinario (int matricula) {
+    public String mostrarUnVeterinario (int matricula) {
         boolean encontrar = buscarVeterinario(matricula);
+        String mensaje = "";
         if (encontrar) {
             for (Veterinario v : veterinarios) {
                 if (v.getMatricula() == matricula) {
-                    System.out.println(v);
+                    mensaje = v.toString();
                 }
             }
         }
         else {
-            System.out.println("No hay Veterinario con esa Matricula");
-
+            mensaje += "No existe el veterinario con esa matricula";
         }
+        return mensaje;
     }
     ///BuscarVetrinario
     public boolean buscarVeterinario (int matricula){
@@ -123,19 +134,22 @@ public class GestorAdministrador {
 
     /// ---------- CONTABILIDAD ---------- ///
     ///Verfacturas
-    public void VerFacturas () throws SQLException{
-            facturas.addAll(dao_facturas.listarActivas());
-            for (Factura f: facturas){
-                System.out.println(f);
-            }
+    public String VerFacturas () throws SQLException{
+        facturas.addAll(dao_facturas.listarActivas());
+        String mensaje = "";
+        for (Factura f: facturas){
+            mensaje += f.toString();
+            mensaje += "------------------------ ";
         }
+        return mensaje;
+    }
     ///ModificarFactura
     public void ModificarFactura(Factura factura) throws SQLException {
         dao_facturas.actualizar(factura);
         facturas.addAll(dao_facturas.listarActivas());
     }
     /// Dar de baja una factura
-    public void darDeBaja(int id) throws SQLException {
+    public boolean darDeBaja(int id) throws SQLException {
         Factura factura = null;
         for (Factura f : facturas) {
             if (f.getId() == id) {
@@ -147,36 +161,41 @@ public class GestorAdministrador {
             dao_facturas.darDeBaja(id);
             facturas.remove(factura);
         }
+        if(facturas.contains(factura)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /// ---------- CREACION DE USUARIOS ---------- ///
     ///Crear Usuario
     public boolean CrearUsuario (Usuario usuario){
-            try {
-                listarUsuarios();
-                for (Usuario u: usuarios){
-                    if (u.getUsername().equals(usuario.getUsername())){
-                        System.out.println("Usuario ya existe.");
+        try {
+            listarUsuarios();
+            for (Usuario u: usuarios){
+                if (u.getUsername().equals(usuario.getUsername())){
+                    System.out.println("Usuario ya existe.");
+                    return false;
+                }
+                else {
+                    if (u.getPassword().equals(usuario.getPassword())){
+                        System.out.println("Contraseña Invalida");
                         return false;
                     }
-                    else {
-                        if (u.getPassword().equals(usuario.getPassword())){
-                            System.out.println("Contraseña Invalida");
-                            return false;
-                        }
-                        else{
-                            dao_usuarios.insertar(usuario);
-                            usuarios.add(usuario);
-                            System.out.println(" El Usuario de veterinario se agregó correctamente -");
-                        }
+                    else{
+                        dao_usuarios.insertar(usuario);
+                        usuarios.add(usuario);
+                        System.out.println(" El Usuario de veterinario se agregó correctamente -");
                     }
                 }
-
-            } catch (SQLException e){
-                System.out.println("Error al agregar el usuario. "+ e.getMessage());
             }
-        return true;
+
+        } catch (SQLException e){
+            System.out.println("Error al agregar el usuario. "+ e.getMessage());
         }
+        return true;
+    }
     ///Listar Usuario
     public void listarUsuarios(){
         try {
@@ -187,28 +206,42 @@ public class GestorAdministrador {
         }
     }
     ///Eliminar Usuario
-    public void eliminarUsuario (int id){
+    public String eliminarUsuario (int id){
         boolean encontro = buscarVeterinario(id);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_usuarios.eliminar(id);
                 usuarios.removeIf(u -> u.getId() == id);
-                System.out.println("Usuario eliminado correctamente");
+                if(!usuarios.contains(id)){
+                    mensaje = "Usuario eliminado correctamente";
+                }else{
+                    mensaje = "Usuario no eliminado";
+                }
             } catch (SQLException e) {
-                System.out.println("Error al eliminar el usuario. " + e.getMessage());
+                mensaje = "Error al eliminar el usuario" + e.getMessage();
+            }finally{
+                return mensaje;
             }
+        }else{
+            mensaje = "Usuario no encontrado";
         }
+        return mensaje;
     }
     ///Modificar Usuario
-    public void modificarUsuario (Usuario usuario){
+    public boolean modificarUsuario (Usuario usuario){
         boolean encontro = buscarUsuario(usuario.getId());
         if (encontro) {
             try {
                 dao_usuarios.modificarUsuario(usuario);
                 listarUsuarios();
+                return true;
             } catch (SQLException e) {
                 System.out.println("Error al modificar el Usuario. "+e.getMessage());
+                return false;
             }
+        }else{
+            return false;
         }
     }
     ///Buscar Usuario
@@ -221,4 +254,4 @@ public class GestorAdministrador {
         }
         return false;
     }
-    }
+}
