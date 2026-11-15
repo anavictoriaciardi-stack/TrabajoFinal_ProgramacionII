@@ -186,7 +186,7 @@ public class GestorVeterinario {
                 listarConsultas();
                 mensaje += "Consulta Modificada correctamente";
             } catch (SQLException e) {
-                System.out.println("Error al modificar la consulta. "+e.getMessage());
+                mensaje = "Error al modificar la consulta. "+e.getMessage();
             }
         }else{
             mensaje += "No se pudo encontrar la consulta";

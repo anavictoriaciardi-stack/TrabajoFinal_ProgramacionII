@@ -1,7 +1,9 @@
 package appui;
 
 import Modelo.Veterinario;
+import Servicio.GestorVeterinario;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,20 +20,25 @@ public class BienvenidaMenu extends Application {
         Button boton1 = new Button("Veterinarios/a");
         Button boton2 = new Button("Administradores/a");
         Button boton3 = new Button("Recepcionistas");
+        Button salir = new Button ("Salir");
         //contenedor VBox
-        VBox contenedor = new VBox(10, titulo,boton1,boton2, boton3);
+        VBox contenedor = new VBox(10, titulo,boton1,boton2, boton3, salir);
 
         //Acciones de botones
 
         boton1.setOnAction(e -> {
             VeterinarioUi vui = new VeterinarioUi();
+            vui.mostrar(primaryStage);
         });
         boton2.setOnAction(e -> {
-            AdministradorUi admUi = new AdministradorUi();
+
         });
 
         boton3.setOnAction(e -> {
-            RecepcionistaUi rui = new RecepcionistaUi();
+
+        });
+        salir.setOnAction(e -> {
+           Platform.exit();
         });
         Scene scena = new Scene(contenedor, 750, 500);
 

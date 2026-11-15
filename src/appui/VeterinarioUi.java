@@ -1,16 +1,401 @@
 package appui;
 
-import javafx.application.Application;
+import Excepciones.TurnoInexistenteException;
+import Modelo.Consulta;
+import Modelo.Mascota;
+import Servicio.GestorVeterinario;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class VeterinarioUi extends Application {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-    public static void main(String[] args) {
-        launch(args);
+public class VeterinarioUi {
+    private GestorVeterinario gestorV = new GestorVeterinario();
+
+    public VeterinarioUi(GestorVeterinario gestorV) {
+        this.gestorV = gestorV;
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    public VeterinarioUi() {
 
+    }
+
+    public void mostrar(Stage stage){
+
+        //Botones de accion
+        Label titulo = new Label("Bienvenido a Veterinario");
+        titulo.setStyle("-fx-font-size: 20");
+        Label subtitulo = new Label("Acciones con mascotas");
+        subtitulo.setStyle("-fx-font-size: 15");
+
+        Button boton1 = new Button("Mostrar pacientes");
+        boton1.setStyle("-fx-font-size: 10");
+        Button boton6 = new Button("Agregar paciente");
+        boton6.setStyle("-fx-font-size: 10");
+        Button boton3 = new Button("Eliminar paciente de la base de datos");
+        boton3.setStyle("-fx-font-size: 10");
+        Button boton4 = new Button("Modificar datos de un paciente");
+        boton4.setStyle("-fx-font-size: 10");
+        Button boton5 = new Button("Buscar paciente");
+        boton5.setStyle("-fx-font-size: 10");
+        //botones acciones consultas
+        Label subtitulo2 = new Label("\nConsultas");
+        subtitulo.setStyle("-fx-font-size: 15");
+        Button botonC1 = new Button("Mostrar consultas");
+        botonC1.setStyle("-fx-font-size: 10");
+        Button botonC2 = new Button("Agregar consultas");
+        botonC2.setStyle("-fx-font-size: 10");
+        Button botonC3 = new Button("Eliminar consultas");
+        botonC3.setStyle("-fx-font-size: 10");
+        Button botonC4 = new Button("Modificar consultas");
+        botonC4.setStyle("-fx-font-size: 10");
+        Button botonC5 = new Button("Buscar consultas");
+        botonC5.setStyle("-fx-font-size: 10");
+        Button botonC6 = new Button("Mostrar historial clinico");
+        botonC6.setStyle("-fx-font-size: 10");
+        Button botonVolver = new Button("Volver al menu principal");
+        botonVolver.setStyle("-fx-font-size: 10");
+        VBox contenedor = new VBox(15, titulo, subtitulo,boton1, boton3, boton4, boton5, subtitulo2
+                                    , botonC1, botonC2, botonC3, botonC4, botonC5, botonC6);
+        ///ACCIONES DE LOS BOTONES MASCOTAS
+        boton1.setOnAction(e -> {
+           Label mostrar = new Label(gestorV.mostrarMascotas());
+           mostrar.setStyle("-fx-font-size: 10");
+           contenedor.getChildren().add(mostrar);
+        });
+        boton6.setOnAction(e -> {
+            Mascota aux = new Mascota();
+            TextField tnombre = new TextField();
+            tnombre.setStyle("-fx-font-size: 10");
+            tnombre.setPromptText("Nombre");
+            TextField tespecie = new TextField();
+            tespecie.setStyle("-fx-font-size: 10");
+            tespecie.setPromptText("Especie");
+            TextField traza = new TextField();
+            traza.setStyle("-fx-font-size: 10");
+            traza.setPromptText("Raza");
+            TextField tedad = new TextField();
+            tedad.setStyle("-fx-font-size: 10");
+            tedad.setPromptText("edad");
+            TextField dni_cliente = new TextField();
+            dni_cliente.setStyle("-fx-font-size: 10");
+            dni_cliente.setPromptText("DNI");
+
+            TextArea descripcion = new TextArea();
+            descripcion.setStyle("-fx-font-size: 10");
+            descripcion.setPromptText("Anadir mascota---");
+            descripcion.setPrefRowCount(5);
+
+            Label mensaje = new Label();
+            Button botonM = new Button("Registrar mascota");
+            botonM.setStyle("-fx-font-size: 10");
+
+            botonM.setOnAction(e2 ->{
+                String nombre = tnombre.getText();
+                String Especie = tespecie.getText();
+                String Raza = traza.getText();
+                String edad = tedad.getText();
+                String DNI = dni_cliente.getText();
+
+
+                    int edadAux = Integer.valueOf(edad);
+                    aux.setNombre(nombre);
+                    aux.setEspecie(Especie);
+                    aux.setRaza(Raza);
+                    aux.setEdad(edadAux);
+                    aux.setCliente_dni(DNI);
+
+                    tnombre.clear();
+                    tespecie.clear();
+                    traza.clear();
+                    tedad.clear();
+                    dni_cliente.clear();
+                    gestorV.agregarMascota(aux);
+                    mensaje.setText("Registrado exitosamente");
+
+                    contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
+                                                            ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
+            });
+
+            contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
+                    ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
+        });
+        boton3.setOnAction(e ->{
+            Label mensaje = new Label("Ingrese el id para eliminar:");
+            TextField tid = new TextField();
+            tid.setStyle("-fx-font-size: 10");
+            tid.setPromptText("ID");
+            String id = tid.getText();
+
+            int idAux = Integer.valueOf(id);
+
+            Label mensaje2  = new Label(gestorV.eliminarMascota(idAux));
+            mensaje2.setStyle("-fx-font-size: 10");
+            contenedor.getChildren().addAll(mensaje, tid, mensaje2);
+        });
+        boton4.setOnAction(e ->{
+                    Label mensaje = new Label("Ingrese el id para buscar:");
+                    TextField tid = new TextField();
+                    tid.setStyle("-fx-font-size: 10");
+                    tid.setPromptText("ID");
+                    String id = tid.getText();
+                    int idAux = Integer.valueOf(id);
+                    if(gestorV.buscarMascota(idAux)){
+
+            TextField tnombre = new TextField();
+            tnombre.setStyle("-fx-font-size: 10");
+            tnombre.setPromptText("Nombre");
+            TextField tespecie = new TextField();
+            tespecie.setStyle("-fx-font-size: 10");
+            tespecie.setPromptText("Especie");
+            TextField traza = new TextField();
+            traza.setStyle("-fx-font-size: 10");
+            traza.setPromptText("Raza");
+            TextField tedad = new TextField();
+            tedad.setStyle("-fx-font-size: 10");
+            tedad.setPromptText("edad");
+            TextField dni_cliente = new TextField();
+            dni_cliente.setStyle("-fx-font-size: 10");
+            dni_cliente.setPromptText("DNI");
+
+            TextArea descripcion = new TextArea();
+            descripcion.setStyle("-fx-font-size: 10");
+            descripcion.setPromptText("Anadir mascota---");
+            descripcion.setPrefRowCount(5);
+
+            Label mensaje2 = new Label();
+            Button botonM = new Button("Registrar mascota");
+
+            botonM.setStyle("-fx-font-size: 10");
+            botonM.setOnAction(e2 -> {
+                String nombre = tnombre.getText();
+                String Especie = tespecie.getText();
+                String Raza = traza.getText();
+                String edad = tedad.getText();
+                String DNI = dni_cliente.getText();
+
+
+                int edadAux = Integer.valueOf(edad);
+
+                Label mostrar = new Label(gestorV.modificarMascota(idAux, nombre, Especie, Raza, edadAux));
+                contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
+                        ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
+                tnombre.clear();
+                tespecie.clear();
+                traza.clear();
+                tedad.clear();
+                dni_cliente.clear();
+
+                mensaje.setText("Modificado exitosamente");
+            });
+                    }
+        });
+        boton5.setOnAction(e ->{
+            Label mensaje = new Label("Ingrese el nombre y el dni para buscar");
+            TextField tnombre = new TextField();
+            tnombre.setStyle("-fx-font-size: 10");
+            tnombre.setPromptText("Nombre");
+            TextField tdni_cliente = new TextField();
+            tdni_cliente.setStyle("-fx-font-size: 10");
+            tdni_cliente.setPromptText("DNI");
+            TextArea descripcion = new TextArea();
+            descripcion.setStyle("-fx-font-size: 10");
+            descripcion.setPromptText("Buscar mascota---");
+
+            String nombre = tnombre.getText();
+            String dni = tdni_cliente.getText();
+
+            Label mostrar = new Label();
+            Button botonM = new Button("Buscar mascota");
+            botonM.setStyle("-fx-font-size: 10");
+            botonM.setOnAction(e2 -> {
+                if(gestorV.buscarMascotaxdniyNombre(nombre, dni)){
+                    try {
+                        mostrar.setText("Mascota encontrar" + gestorV.mostrarUnaMascota(nombre, dni));
+                    } catch (TurnoInexistenteException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }else{
+                    mostrar.setText("Mascota no encontrada");
+                }
+                tnombre.clear();
+                tdni_cliente.clear();
+            });
+            contenedor.getChildren().addAll(mensaje,tnombre,tdni_cliente, botonM, mostrar);
+
+        });
+
+        ///ACCIONES DE LOS BOTONES CONSULTAS
+        botonC1.setOnAction(e2 -> {
+            Label mostrar = new Label(gestorV.mostrarConsultas());
+            mostrar.setStyle("-fx-font-size: 10");
+            contenedor.getChildren().addAll(mostrar);
+        });
+        botonC2.setOnAction(e2 -> {
+//            private int mascota_id;
+//            private int matricula_veterinario;
+//            private LocalDateTime fecha;
+//            private String diagnostico;
+//            private String tratamiento;
+//            private String receta;
+            Label mensaje = new Label("Nueva Consulta");
+            TextField tMascotaId = new TextField();
+            tMascotaId.setPromptText("id de la mascota");
+            TextField tMatricula = new TextField();
+            tMatricula.setPromptText("matricula");
+            DatePicker tFecha = new DatePicker(LocalDate.now());
+            TextArea tDiagnostico = new TextArea();
+            tDiagnostico.setPromptText("Diagnostico");
+            tDiagnostico.setPrefRowCount(2);
+
+            TextArea tTratamiento = new TextArea();
+            tTratamiento.setPromptText("Tratamiento indicado");
+            tTratamiento.setPrefRowCount(2);
+
+            TextArea tReceta = new TextArea();
+            tReceta.setPromptText("Medicamentos y dosis");
+            tReceta.setPrefRowCount(2);
+
+            Label mensaje2 = new Label();
+            Button botonGuardar = new Button("Guardar Consulta");
+
+            botonGuardar.setOnAction(e -> {
+                try {
+                    int mascotaId = Integer.parseInt(tMascotaId.getText().trim());
+                    int matriculaVet = Integer.parseInt(tMatricula.getText().trim());
+
+                    // Combinamos la fecha elegida en el calendario con la hora actual
+                    LocalDate fechaElegida = tFecha.getValue();
+                    if (fechaElegida == null) {
+                        mensaje2.setText("Error: Debe seleccionar una fecha.");
+                        return;
+                    }
+                    LocalDateTime fechaHora = LocalDateTime.of(fechaElegida, LocalTime.now());
+
+                    // Textos
+                    String diagnostico = tDiagnostico.getText().trim();
+                    String tratamiento = tTratamiento.getText().trim();
+                    String receta = tReceta.getText().trim();
+
+                    if (diagnostico.isEmpty() || tratamiento.isEmpty()) {
+                        mensaje.setText("Error Diagnóstico y tratamiento son obligatorios.");
+                        return;
+                    }
+                    Consulta aux = new Consulta(mascotaId, matriculaVet, fechaHora, diagnostico, tratamiento, receta);
+                    gestorV.agregarConsulta(aux);
+
+                    tMascotaId.clear();
+                    tMatricula.clear();
+                    tFecha.setValue(LocalDate.now());
+                    tDiagnostico.clear();
+                    tTratamiento.clear();
+                    tReceta.clear();
+
+                    mensaje2.setText("Consulta registrada correctamente");
+
+                } catch (NumberFormatException ex) {
+                    mensaje2.setStyle("-fx-text-fill: red;");
+                    mensaje2.setText("Error: El ID de mascota y la matrícula deben ser números enteros.");
+                } catch (Exception ex) {
+                    mensaje2.setStyle("-fx-text-fill: red;");
+                    mensaje2.setText("Error al guardar: " + ex.getMessage());
+                }
+            });
+            GridPane g = new GridPane();
+            g.setHgap(10);
+            g.setVgap(10);
+
+            g.addRow(0, new Label("ID Mascota:"), tMascotaId);
+            g.addRow(1, new Label("Matrícula Vet.:"), tMatricula);
+            g.addRow(2, new Label("Fecha:"), tFecha);
+            g.addRow(3, new Label("Diagnóstico:"), tDiagnostico);
+            g.addRow(4, new Label("Tratamiento:"), tTratamiento);
+            g.addRow(5, new Label("Receta:"), tReceta);
+
+            contenedor.getChildren().addAll(mensaje, g, botonGuardar, mensaje2);
+        });
+        botonC3.setOnAction(e -> {
+            Label mensaje = new Label("Ingrese el id para eliminar:");
+            TextField tid = new TextField();
+            tid.setStyle("-fx-font-size: 10");
+            tid.setPromptText("ID");
+            String id = tid.getText();
+
+            int idAux = Integer.valueOf(id);
+
+            Label mensaje2  = new Label(gestorV.eliminarConsulta(idAux));
+            mensaje2.setStyle("-fx-font-size: 10");
+            contenedor.getChildren().addAll(mensaje, tid, mensaje2);
+
+        });
+        botonC4.setOnAction(e -> {
+            Label mensaje = new Label("Ingrese el id para buscar:");
+            TextField tid = new TextField();
+            tid.setStyle("-fx-font-size: 10");
+            tid.setPromptText("ID");
+
+            int id = Integer.valueOf(tid.getText());
+            if(gestorV.buscarConsulta(id)){
+                TextField tnuevoTratamiento = new TextField();
+                tnuevoTratamiento.setStyle("-fx-font-size: 10");
+                tnuevoTratamiento.setPromptText("Tratamiento");
+
+                TextField tnuevoReceta = new TextField();
+                tnuevoReceta.setStyle("-fx-font-size: 10");
+                tnuevoReceta.setPromptText("Receta");
+
+                String receta = tnuevoReceta.getText();
+                String tratamiento = tnuevoTratamiento.getText();
+                Label mensaje2 = new Label(gestorV.modificarConsulta(id,tratamiento, receta));
+
+                contenedor.getChildren().addAll(mensaje2, tnuevoReceta, tnuevoTratamiento);
+            }else{
+                contenedor.getChildren().add(new Label("No existe la consulta"));
+            }
+            contenedor.getChildren().add(mensaje);
+        });
+        botonC5.setOnAction(e ->{
+            Label mensaje = new Label("Ingrese el id para buscar:");
+            TextField tid = new TextField();
+            tid.setStyle("-fx-font-size: 10");
+            tid.setPromptText("ID");
+            String id = tid.getText();
+            int idAux = Integer.valueOf(id);
+            if(gestorV.buscarConsulta(idAux)){
+                contenedor.getChildren().add(new Label("Se econtro la consulta:" + gestorV.mostrarUnaConsulta(idAux)));
+            }else{
+                contenedor.getChildren().add(new Label("No existe la consulta"));
+            }
+            tid.clear();
+        });
+        botonC6.setOnAction(e ->{
+            Label mensaje = new Label("Ingrese el id para buscar:");
+            TextField tid = new TextField();
+            tid.setStyle("-fx-font-size: 10");
+            tid.setPromptText("ID");
+
+            int id = Integer.valueOf(tid.getText());
+            if(gestorV.buscarMascota(id)){
+                contenedor.getChildren().add(new Label("Se encontro la mascota:" + gestorV.historialClinico(id)));
+
+            }else{
+                contenedor.getChildren().add(new Label("No existe la mascota"));
+            }
+
+            tid.clear();
+        });
+        botonVolver.setOnAction(e ->{
+            BienvenidaMenu inicio = new BienvenidaMenu();
+            inicio.start(stage);
+        });
+        Scene scena = new Scene(contenedor, 750, 500);
+        stage.setTitle("Pagina veterinarios");
+        stage.setScene(scena);
     }
 }
