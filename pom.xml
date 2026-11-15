@@ -14,7 +14,6 @@
         <javafx.version>27.0.1</javafx.version>
     </properties>
 
-    <!-- El proyecto conserva sus fuentes directamente dentro de src/. -->
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
@@ -22,6 +21,9 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
+                <configuration>
+                    <mainClass>Main</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
