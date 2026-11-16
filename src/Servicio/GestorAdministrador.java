@@ -1,6 +1,7 @@
 package Servicio;
 
 import Modelo.*;
+import Persistencia.DetalleFacturaDAO;
 import Persistencia.FacturaDAO;
 import Persistencia.UsuarioDAO;
 import Persistencia.VeterinarioDAO;
@@ -13,6 +14,7 @@ public class GestorAdministrador {
     private VeterinarioDAO dao_veterinario;
     private FacturaDAO dao_facturas;
     private UsuarioDAO dao_usuarios;
+    private DetalleFacturaDAO dao_detallesFacturas;
     private Set <Veterinario> veterinarios;
     private Set <Factura> facturas;
     private Set <Usuario> usuarios;
@@ -21,6 +23,7 @@ public class GestorAdministrador {
         this.dao_veterinario = new VeterinarioDAO();
         this.dao_facturas = new FacturaDAO();
         this.dao_usuarios= new UsuarioDAO();
+        this.dao_detallesFacturas= new DetalleFacturaDAO();
         this.veterinarios = new HashSet<>();
         this.facturas = new HashSet<>();
         this.usuarios= new HashSet<>();
@@ -143,7 +146,9 @@ public class GestorAdministrador {
     public String VerFacturas () throws SQLException{
         facturas.addAll(dao_facturas.listarActivas());
         String mensaje = "";
+
         for (Factura f: facturas){
+            f.setItems(dao_detallesFacturas.listarPorFactura(f.getId()));
             mensaje += f.toString();
             mensaje += "------------------------ \n";
         }

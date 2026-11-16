@@ -247,7 +247,7 @@ public class GestorRecepcionista {
         String mostrarFactura = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
         Factura factura = new Factura(cliente.getDni(),0,formaPago);
-        factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
+        factura.agregarItem(factura.getId(), "Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
         String resultado = factura.procesarPago(monto, formaPago);
 
         dao_factura.insertar(factura);
@@ -263,9 +263,9 @@ public class GestorRecepcionista {
         String mostrar = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
         Factura factura = new Factura(cliente.getDni(),0,formaPago);
-        factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
+        factura.agregarItem(factura.getId(), "Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
         for (Medicamento m: medicamentos){
-            factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
+            factura.agregarItem(factura.getId(), "Medicamento"+m.getNombre(), m.getPrecio());
         }
         String resultado = factura.procesarPago(monto, formaPago);
 
@@ -284,7 +284,7 @@ public class GestorRecepcionista {
         Cliente cliente = dao_cliente.buscarPorDni(dni);
         Factura factura = new Factura(cliente.getDni(),0,formaPago);
         for (Medicamento m: medicamentos){
-            factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
+            factura.agregarItem(factura.getId(), "Medicamento" +m.getNombre(), m.getPrecio());
         }
         String resultado = factura.procesarPago(factura.getMontoTotal(), formaPago);
 

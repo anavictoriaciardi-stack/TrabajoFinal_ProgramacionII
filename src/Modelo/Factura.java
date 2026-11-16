@@ -96,8 +96,8 @@ public class Factura implements iPagable {
     }
 
 
-    public void agregarItem(String concepto, double subtotal) {
-        items.add(new DetalleFactura(concepto, subtotal));
+    public void agregarItem(int facturaId,String concepto, double subtotal) {
+        items.add(new DetalleFactura(facturaId,concepto, subtotal));
         this.montoTotal += subtotal;
     }
 
