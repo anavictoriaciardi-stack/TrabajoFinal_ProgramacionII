@@ -106,6 +106,7 @@ public class GestorAdministrador {
         listarVeterinarios();
         String mensaje = "";
         for (Veterinario v: veterinarios){
+            mensaje+= " --------------------- \n";
             mensaje += v.toString();
         }
         return mensaje;
@@ -144,7 +145,7 @@ public class GestorAdministrador {
         String mensaje = "";
         for (Factura f: facturas){
             mensaje += f.toString();
-            mensaje += "------------------------ ";
+            mensaje += "------------------------ \n";
         }
         return mensaje;
     }

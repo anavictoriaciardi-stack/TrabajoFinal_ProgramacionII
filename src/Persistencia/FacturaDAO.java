@@ -39,7 +39,7 @@ public class FacturaDAO {
              PreparedStatement ps = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setTimestamp(1, Timestamp.valueOf(factura.getFechaHora()));
-            ps.setString(2, factura.getCliente().getDni());
+            ps.setString(2, factura.getCliente_dni());
             ps.setDouble(3, factura.getMontoTotal());
             ps.setString(4, factura.getFormaPago());
 
@@ -77,7 +77,7 @@ public class FacturaDAO {
                     ClienteDAO clienteDAO = new ClienteDAO();
                     Cliente clienteAsociado = clienteDAO.buscarPorDni(dniCliente);
 
-                    f.setCliente(clienteAsociado);
+                    f.setCliente_dni(clienteAsociado.getDni());
                     f.setMontoTotal(rs.getDouble("monto_total"));
                     f.setFormaPago(rs.getString("forma_pago"));
                     return f;
@@ -102,8 +102,10 @@ public class FacturaDAO {
                 Factura f = new Factura();
                 f.setId(rs.getInt("id"));
                 f.setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime());
+                f.setCliente_dni(rs.getString("cliente_dni"));
                 f.setMontoTotal(rs.getDouble("monto_total"));
                 f.setFormaPago(rs.getString("forma_pago"));
+                f.setActivo(rs.getBoolean("activo"));
                 lista.add(f);
             }
         }

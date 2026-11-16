@@ -11,24 +11,24 @@ public class Factura implements iPagable {
 
     private int id;
     private LocalDateTime fechaHora;
-    private Cliente cliente;
+    private String cliente_dni;
     private List<DetalleFactura> items; // List para los ítems cobrados (ej. consulta, medicamentos)
     private double montoTotal;
     private String formaPago;
     private boolean activo;
 
-    public Factura(int id, LocalDateTime fechaHora, Cliente cliente,  double montoTotal, String formaPago, boolean activo) {
+    public Factura(int id, LocalDateTime fechaHora, String cliente_dni,  double montoTotal, String formaPago, boolean activo) {
         this.id = id;
         this.fechaHora = LocalDateTime.now();
-        this.cliente = cliente;
+        this.cliente_dni = cliente_dni;
         this.items = items;
         this.montoTotal = montoTotal;
         this.formaPago = formaPago;
         this.activo = true;
     }
-    public Factura(Cliente cliente,  double montoTotal, String formaPago) {
+    public Factura(String cliente,  double montoTotal, String formaPago) {
         this.fechaHora = LocalDateTime.now();
-        this.cliente = cliente;
+        this.cliente_dni = cliente_dni;
         this.items = items;
         this.montoTotal = montoTotal;
         this.formaPago = formaPago;
@@ -55,12 +55,12 @@ public class Factura implements iPagable {
         this.fechaHora = fechaHora;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public String getCliente_dni() {
+        return cliente_dni;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCliente_dni(String cliente_dni) {
+        this.cliente_dni = cliente_dni;
     }
 
     public List<DetalleFactura> getItems() {
@@ -120,11 +120,11 @@ public class Factura implements iPagable {
         return "Factura{" +
                 "id=" + id +
                 ", fechaHora=" + fechaHora +
-                ", cliente=" + cliente +
-                ", items =" + items.toString() +
+                ", cliente=" + cliente_dni +
+                ", items =" + items +
                 ", montoTotal=" + montoTotal +
                 ", formaPago='" + formaPago + '\'' +
-                ", activo=" + activo +
+                ", activo=" + activo + "\n"+
                 '}';
     }
 }

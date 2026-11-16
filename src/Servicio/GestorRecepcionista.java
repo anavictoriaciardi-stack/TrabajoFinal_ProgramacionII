@@ -246,7 +246,7 @@ public class GestorRecepcionista {
     public String cobrarTurno(Turno t, double monto, String formaPago) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
         String mostrarFactura = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
-        Factura factura = new Factura(cliente,0,formaPago);
+        Factura factura = new Factura(cliente.getDni(),0,formaPago);
         factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
         String resultado = factura.procesarPago(monto, formaPago);
 
@@ -262,7 +262,7 @@ public class GestorRecepcionista {
     public String cobrarTurnoConMedicamentos(Turno t, double monto, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
         String mostrar = "";
         Cliente cliente = dao_cliente.buscarPorDni(t.getDni_cliente());
-        Factura factura = new Factura(cliente,0,formaPago);
+        Factura factura = new Factura(cliente.getDni(),0,formaPago);
         factura.agregarItem("Consulta veterinaria - Turno N° " + t.getID(), t.getCosto());
         for (Medicamento m: medicamentos){
             factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
@@ -282,7 +282,7 @@ public class GestorRecepcionista {
     public String cobrarMedicamentos(String dni, String formaPago, List <Medicamento> medicamentos) throws SQLException, ClienteNoEncontradoException, PagoInvalidoException {
         String mostrar = "";
         Cliente cliente = dao_cliente.buscarPorDni(dni);
-        Factura factura = new Factura(cliente,0,formaPago);
+        Factura factura = new Factura(cliente.getDni(),0,formaPago);
         for (Medicamento m: medicamentos){
             factura.agregarItem("Medicamento"+m.getNombre(), m.getPrecio());
         }
