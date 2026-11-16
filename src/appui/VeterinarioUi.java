@@ -153,70 +153,51 @@ public class VeterinarioUi {
             TextField tid = new TextField();
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
-            String id = tid.getText();
-
-            int idAux = Integer.parseInt(id);
-
-            Label mensaje2  = new Label(gestorV.eliminarMascota(idAux));
-            mensaje2.setStyle("-fx-font-size: 10");
-            contenedor.getChildren().addAll(mensaje, tid, mensaje2);
+            Button eliminar = new Button("Eliminar");
+            eliminar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    mensaje.setText(gestorV.eliminarMascota(id));
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese un ID numerico valido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, eliminar);
         });
         boton4.setOnAction(e ->{
-                    Label mensaje = new Label("Ingrese el id para buscar:");
-                    TextField tid = new TextField();
-                    tid.setStyle("-fx-font-size: 10");
-                    tid.setPromptText("ID");
-                    String id = tid.getText();
-                    int idAux = Integer.parseInt(id);
-                    if(gestorV.buscarMascota(idAux)){
-
-            TextField tnombre = new TextField();
-            tnombre.setStyle("-fx-font-size: 10");
-            tnombre.setPromptText("Nombre");
-            TextField tespecie = new TextField();
-            tespecie.setStyle("-fx-font-size: 10");
-            tespecie.setPromptText("Especie");
-            TextField traza = new TextField();
-            traza.setStyle("-fx-font-size: 10");
-            traza.setPromptText("Raza");
-            TextField tedad = new TextField();
-            tedad.setStyle("-fx-font-size: 10");
-            tedad.setPromptText("edad");
-            TextField dni_cliente = new TextField();
-            dni_cliente.setStyle("-fx-font-size: 10");
-            dni_cliente.setPromptText("DNI");
-
-            TextArea descripcion = new TextArea();
-            descripcion.setStyle("-fx-font-size: 10");
-            descripcion.setPromptText("Anadir mascota---");
-            descripcion.setPrefRowCount(5);
-
-            Label mensaje2 = new Label();
-            Button botonM = new Button("Registrar mascota");
-
-            botonM.setStyle("-fx-font-size: 10");
-            botonM.setOnAction(e2 -> {
-                String nombre = tnombre.getText();
-                String Especie = tespecie.getText();
-                String Raza = traza.getText();
-                String edad = tedad.getText();
-                String DNI = dni_cliente.getText();
-
-
-                int edadAux = Integer.parseInt(edad);
-
-                Label mostrar = new Label(gestorV.modificarMascota(idAux, nombre, Especie, Raza, edadAux));
-                contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
-                        ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
-                tnombre.clear();
-                tespecie.clear();
-                traza.clear();
-                tedad.clear();
-                dni_cliente.clear();
-
-                mensaje.setText("Modificado exitosamente");
-            });
+            Label mensaje = new Label("Ingrese el ID de la mascota:");
+            TextField tid = new TextField();
+            tid.setPromptText("ID");
+            Button buscar = new Button("Buscar");
+            buscar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    if (!gestorV.buscarMascota(id)) {
+                        mensaje.setText("No existe la mascota");
+                        return;
                     }
+
+                    TextField tnombre = crearCampo("Nombre");
+                    TextField tespecie = crearCampo("Especie");
+                    TextField traza = crearCampo("Raza");
+                    TextField tedad = crearCampo("Edad");
+                    Label resultado = new Label();
+                    Button guardar = new Button("Guardar cambios");
+                    guardar.setOnAction(ev2 -> {
+                        try {
+                            int edad = Integer.parseInt(tedad.getText().trim());
+                            resultado.setText(gestorV.modificarMascota(id, tnombre.getText().trim(),
+                                    tespecie.getText().trim(), traza.getText().trim(), edad));
+                        } catch (NumberFormatException ex) {
+                            resultado.setText("Ingrese una edad numerica valida");
+                        }
+                    });
+                    contenedor.getChildren().addAll(tnombre, tespecie, traza, tedad, guardar, resultado);
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese un ID numerico valido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, buscar);
         });
         boton5.setOnAction(e ->{
             Label mensaje = new Label("Ingrese el nombre y el dni para buscar");
@@ -346,54 +327,65 @@ public class VeterinarioUi {
             TextField tid = new TextField();
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
-            String id = tid.getText();
-
-            int idAux = Integer.parseInt(id);
-
-            Label mensaje2  = new Label(gestorV.eliminarConsulta(idAux));
-            mensaje2.setStyle("-fx-font-size: 10");
-            contenedor.getChildren().addAll(mensaje, tid, mensaje2);
-
+            Button eliminar = new Button("Eliminar");
+            eliminar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    mensaje.setText(gestorV.eliminarConsulta(id));
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese un ID numérico válido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, eliminar);
         });
         botonC4.setOnAction(e -> {
             Label mensaje = new Label("Ingrese el id para buscar:");
             TextField tid = new TextField();
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
+            Button buscar = new Button("Buscar");
+            buscar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    if (!gestorV.buscarConsulta(id)) {
+                        mensaje.setText("No existe la consulta");
+                        return;
+                    }
 
-            int id = Integer.parseInt(tid.getText());
-            if(gestorV.buscarConsulta(id)){
-                TextField tnuevoTratamiento = new TextField();
-                tnuevoTratamiento.setStyle("-fx-font-size: 10");
-                tnuevoTratamiento.setPromptText("Tratamiento");
-
-                TextField tnuevoReceta = new TextField();
-                tnuevoReceta.setStyle("-fx-font-size: 10");
-                tnuevoReceta.setPromptText("Receta");
-
-                String receta = tnuevoReceta.getText();
-                String tratamiento = tnuevoTratamiento.getText();
-                Label mensaje2 = new Label(gestorV.modificarConsulta(id,tratamiento, receta));
-
-                contenedor.getChildren().addAll(mensaje2, tnuevoReceta, tnuevoTratamiento);
-            }else{
-                contenedor.getChildren().add(new Label("No existe la consulta"));
-            }
-            contenedor.getChildren().add(mensaje);
+                    TextField tnuevoTratamiento = new TextField();
+                    tnuevoTratamiento.setPromptText("Nuevo tratamiento");
+                    TextField tnuevoReceta = new TextField();
+                    tnuevoReceta.setPromptText("Nueva receta");
+                    Button guardar = new Button("Guardar cambios");
+                    guardar.setOnAction(ev2 -> mensaje.setText(
+                            gestorV.modificarConsulta(id, tnuevoTratamiento.getText().trim(), tnuevoReceta.getText().trim())));
+                    contenedor.getChildren().addAll(tnuevoTratamiento, tnuevoReceta, guardar);
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese un ID numérico válido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, buscar);
         });
         botonC5.setOnAction(e ->{
             Label mensaje = new Label("Ingrese el id para buscar:");
             TextField tid = new TextField();
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
-            String id = tid.getText();
-            int idAux = Integer.parseInt(id);
-            if(gestorV.buscarConsulta(idAux)){
-                contenedor.getChildren().add(new Label("Se econtro la consulta:" + gestorV.mostrarUnaConsulta(idAux)));
-            }else{
-                contenedor.getChildren().add(new Label("No existe la consulta"));
-            }
-            tid.clear();
+            Label resultado = new Label();
+            Button buscar = new Button("Buscar");
+            buscar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    if(gestorV.buscarConsulta(id)){
+                        resultado.setText("Se encontro la consulta: " + gestorV.mostrarUnaConsulta(id));
+                    }else{
+                        resultado.setText("No existe la consulta");
+                    }
+                } catch (NumberFormatException ex) {
+                    resultado.setText("Ingrese un ID numerico valido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, buscar, resultado);
         });
         botonC6.setOnAction(e ->{
             Label mensaje = new Label("Ingrese el id para buscar:");
