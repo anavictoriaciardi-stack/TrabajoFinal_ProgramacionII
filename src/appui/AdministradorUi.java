@@ -85,7 +85,7 @@ public class AdministradorUi {
 
         ///Acciones de botones veterinarios
         mostrarVeterinarios.setOnAction(e -> {
-            Label mensaje = new Label(gestor.mostrarVeterinarios());
+            Label mensaje = new Label(gestor.mostrarVeterinarios() + "\n");
             mensaje.setStyle("-fx-font-size: 10");
 
             contenedor.getChildren().add(mensaje);
