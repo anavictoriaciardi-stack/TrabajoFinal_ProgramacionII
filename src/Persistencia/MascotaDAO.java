@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 public class MascotaDAO {
 
-    public void insertar(Mascota mascota) throws SQLException {
+    public int insertar(Mascota mascota) throws SQLException {
         String sql = "INSERT INTO mascota (nombre, especie, raza, edad, cliente_dni) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConexionBDD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, mascota.getNombre());
             ps.setString(2, mascota.getEspecie());
             ps.setString(3, mascota.getRaza());
@@ -22,13 +22,13 @@ public class MascotaDAO {
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    int idGenerado = generatedKeys.getInt(1); // Obtenemos el número de ID
-                    mascota.setId(idGenerado); // Lo guardamos en el objeto en memoria
-                    System.out.println("Mascota insertada con éxito. ID asignado: " + idGenerado);
+                    int idGenerado = generatedKeys.getInt(1);
+                    mascota.setId(idGenerado);
+                    return idGenerado;
                 }
             }
-
         }
+        return -1;
     }
 
     public List<Mascota> listarMascotas() throws SQLException{
@@ -53,7 +53,7 @@ public class MascotaDAO {
     //MODIFICAR MASCOTA
     public boolean modificarMascota(int id, String nuevoNombre,String especieNueva, String nuevaRaza, int Edadnueva)throws SQLException{
 
-        String sql=" UPDATE mascota SET nombre=?, SET especie=?, SET raza=?, SET edad=? WHERE ID= ?";
+        String sql=" UPDATE mascota SET nombre=?,  especie=?,  raza=?,  edad=? WHERE id= ?";
 
         try(Connection con= ConexionBDD.conectar();
         PreparedStatement ps= con.prepareStatement(sql)) {

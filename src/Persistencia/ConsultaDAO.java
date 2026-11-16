@@ -12,11 +12,11 @@ import java.util.List;
 public class ConsultaDAO {
 
     // 1. INSERTAR CONSULTA
-    public void insertar(Consulta consulta)throws SQLException {
+    public int insertar(Consulta consulta)throws SQLException {
         String sql = "INSERT INTO consulta (mascota_id, matricula_veterinario, fecha, diagnostico, tratamiento, receta) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBDD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, consulta.getMascota_id());
             ps.setInt(2, consulta.getMatricula_veterinario());
@@ -31,10 +31,11 @@ public class ConsultaDAO {
                 if (generatedKeys.next()) {
                     int idGenerado = generatedKeys.getInt(1);
                     consulta.setID(idGenerado); // Se lo asignamos al objeto en memoria
-                    System.out.println("Consulta médica registrada correctamente con ID: " + idGenerado);
+                    return idGenerado;
                 }
             }
         }
+        return -1;
     }
 
     // 2. LISTAR CONSULTAS
@@ -69,7 +70,7 @@ public class ConsultaDAO {
 
     public boolean modificarConsulta(int id, String nuevoTratamiento, String nuevaReceta)throws SQLException{
 
-        String sql= "UPDATE consulta SET tratamiento=?, SET receta =? WHERE id= ?";
+        String sql= "UPDATE consulta SET tratamiento=?, receta =? WHERE id= ?";
         try(Connection con= ConexionBDD.conectar();
         PreparedStatement ps= con.prepareStatement(sql)){
 

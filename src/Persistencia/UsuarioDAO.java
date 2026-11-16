@@ -16,7 +16,7 @@ public class UsuarioDAO {
 
     public Usuario obtenerPorUserName(String username) throws SQLException {
 
-        String sql = " SELECT id, nombre_usuario, password, rol WHERE nombre_usuario=?";
+        String sql = " SELECT id, nombre_usuario, password, rol FROM usuarios WHERE nombre_usuario=?";
 
         Usuario usuario = null;
 
@@ -92,7 +92,7 @@ public class UsuarioDAO {
     ///
     public boolean modificarUsuario(Usuario usuario)throws SQLException{
 
-        String sql= "UPDATE usuarios SET nombre = ?,  password= ? rol =? WHERE ID= ?";
+        String sql= "UPDATE usuarios SET nombre = ?,  password= ?,  rol =? WHERE ID= ?";
         try (Connection conn = ConexionBDD.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

@@ -40,7 +40,7 @@ public class ClienteDAO {
 
         try (Connection conn = ConexionBDD.conectar();
              PreparedStatement st = conn.prepareStatement(sql);
-             ResultSet rs = st.executeQuery(sql)) {
+             ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 Cliente c = new Cliente();
@@ -64,12 +64,11 @@ public class ClienteDAO {
         try (Connection con = ConexionBDD.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            // Seteamos el parámetro del DNI de manera segura contra SQL Injection
             ps.setString(1, dni);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    // Mapeamos los datos de la base de datos al objeto Cliente
+
                     Cliente cliente = new Cliente();
                     cliente.setDni(rs.getString("dni"));
                     cliente.setNombre(rs.getString("nombre"));
@@ -83,7 +82,6 @@ public class ClienteDAO {
             }
         }
 
-        // Si el ResultSet no arrojó resultados, lanzamos la excepción personalizada
         throw new ClienteNoEncontradoException("No se encontró ningún cliente registrado con el DNI: " + dni);
     }
 
@@ -104,14 +102,14 @@ public class ClienteDAO {
 
     // modificar contacto del cliente
 
-    public boolean modificar(int id,String telefono)throws SQLException{
-        String sql= " UPDATE clientes SET telefono= ? WHERE id= ?";
+    public boolean modificar(String dni,String telefono)throws SQLException{
+        String sql= " UPDATE cliente SET telefono= ? WHERE dni= ?";
 
         try(Connection con= ConexionBDD.conectar();
        PreparedStatement ps= con.prepareStatement(sql) ){
 
             ps.setString(1,telefono);
-            ps.setInt(2,id);
+            ps.setString(2,dni);
 
           return  ps.executeUpdate()> 0;
 
