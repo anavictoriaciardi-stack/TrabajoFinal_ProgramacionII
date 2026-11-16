@@ -56,12 +56,13 @@ public class RecepcionistaUi {
         Button buscarTurno = new Button("Buscar turno");
         Button modificarTurno = new Button("Modificar turno");
         Button eliminarTurno = new Button("Eliminar turno");
+        Button volver = new Button("Volver");
         Label resultado = new Label();
         resultado.setWrapText(true);
 
         VBox contenido = new VBox(10, titulo, clientesTitulo, agregarCliente, buscarCliente,
                 eliminarCliente, turnosTitulo, mostrarTurnos, agregarTurno, buscarTurno,
-                modificarTurno, eliminarTurno, resultado);
+                modificarTurno, eliminarTurno, resultado, volver);
 
         agregarCliente.setOnAction(e -> {
             TextField dni = campo("DNI");
@@ -211,6 +212,10 @@ public class RecepcionistaUi {
             contenido.getChildren().addAll(new Label("ID del turno:"), id, eliminar);
         });
 
+        volver.setOnAction(e->{
+            BienvenidaMenu inicio = new BienvenidaMenu();
+            inicio.start(stage);
+        });
         Scene scene = new Scene(contenido, 750, 600);
         stage.setTitle("Zona recepcionista");
         stage.setScene(scene);

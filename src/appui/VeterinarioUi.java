@@ -290,7 +290,7 @@ public class VeterinarioUi {
                     int mascotaId = Integer.parseInt(tMascotaId.getText().trim());
                     int matriculaVet = Integer.parseInt(tMatricula.getText().trim());
 
-                    // Combinamos la fecha elegida en el calendario con la hora actual
+
                     LocalDate fechaElegida = tFecha.getValue();
                     if (fechaElegida == null) {
                         mensaje2.setText("Error: Debe seleccionar una fecha.");
@@ -298,7 +298,6 @@ public class VeterinarioUi {
                     }
                     LocalDateTime fechaHora = LocalDateTime.of(fechaElegida, LocalTime.now());
 
-                    // Textos
                     String diagnostico = tDiagnostico.getText().trim();
                     String tratamiento = tTratamiento.getText().trim();
                     String receta = tReceta.getText().trim();
