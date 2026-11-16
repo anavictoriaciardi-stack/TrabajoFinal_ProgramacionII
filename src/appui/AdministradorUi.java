@@ -91,14 +91,6 @@ public class AdministradorUi {
             contenedor.getChildren().add(mensaje);
         });
         agregarVeterinarios.setOnAction(e -> {
-//            protected String dni;
-//            protected String nombre;
-//            protected String apellido;
-//            protected String telefono;
-//            protected String email;
-//            private int matricula;
-//            private String especialidad;
-
             TextField tDni = crearCampo("DNI:");
             TextField tNombre = crearCampo("Nombre:");
             TextField tApellido = crearCampo("Apellido:");
@@ -106,96 +98,90 @@ public class AdministradorUi {
             TextField tEmail = crearCampo("Email:");
             TextField tMatricula = crearCampo("Matricula:");
             TextField tEspecialidad = crearCampo("Especialidad:");
-
             Label mensaje = new Label();
             Button btnRegistrar = new Button("Registrar Veterinario");
             btnRegistrar.setStyle("-fx-font-size: 10");
 
-            btnRegistrar.setOnAction(e2->{
-                String dni = tDni.getText().trim();
-                String  nombre = tNombre.getText().trim();
-                String  apellido = tApellido.getText().trim();
-                String  telefono = tTelefono.getText().trim();
-                String  email = tEmail.getText().trim();
-                int  matricula = Integer.parseInt(tMatricula.getText().trim());
-                String  especialidad = tEspecialidad.getText().trim();
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(8);
+            grid.addRow(0, new Label("DNI:"), tDni);
+            grid.addRow(1, new Label("Nombre:"), tNombre);
+            grid.addRow(2, new Label("Apellido:"), tApellido);
+            grid.addRow(3, new Label("Telefono:"), tTelefono);
+            grid.addRow(4, new Label("Email:"), tEmail);
+            grid.addRow(5, new Label("Matricula:"), tMatricula);
+            grid.addRow(6, new Label("Especialidad:"), tEspecialidad);
+            contenedor.getChildren().addAll(new Label("Registro de veterinario"), grid, btnRegistrar, mensaje);
 
-                if (nombre.isEmpty() || dni.isEmpty() || telefono.isEmpty() || apellido.isEmpty() || email.isEmpty()) {
+            btnRegistrar.setOnAction(e2 -> {
+                String dni = tDni.getText().trim();
+                String nombre = tNombre.getText().trim();
+                String apellido = tApellido.getText().trim();
+                String telefono = tTelefono.getText().trim();
+                String email = tEmail.getText().trim();
+                String matriculaTexto = tMatricula.getText().trim();
+                String especialidad = tEspecialidad.getText().trim();
+
+                if (dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty()
+                        || email.isEmpty() || matriculaTexto.isEmpty() || especialidad.isEmpty()) {
                     mensaje.setStyle("-fx-text-fill: red;");
-                    mensaje.setText("Error: Completa todos los campos obligatorios.");
+                    mensaje.setText("Complete todos los campos.");
                     return;
                 }
                 try {
-                    Veterinario aux = new Veterinario(dni, nombre, apellido, telefono, email, matricula, especialidad);
-                    tDni.clear();
-                    tNombre.clear();
-                    tApellido.clear();
-                    tTelefono.clear();
-                    tEmail.clear();
-                    tMatricula.clear();
-                    tEspecialidad.clear();
-
+                    int matricula = Integer.parseInt(matriculaTexto);
+                    Veterinario veterinario = new Veterinario(dni, nombre, apellido, telefono,
+                            email, matricula, especialidad);
                     mensaje.setStyle("-fx-text-fill: green;");
-                    mensaje.setText("Mascota registrada exitosamente");
-                }catch (NumberFormatException ex) {
+                    mensaje.setText(gestor.agregarVeterinario(veterinario));
+                } catch (NumberFormatException ex) {
                     mensaje.setStyle("-fx-text-fill: red;");
-                    mensaje.setText("Error: La edad debe ser un número válido.");
+                    mensaje.setText("La matricula debe ser numerica.");
                 }
-                GridPane grid = new GridPane();
-                grid.setHgap(10);
-                grid.setVgap(8);
-                grid.addRow(0, new Label("DNI:"), tDni);
-                grid.addRow(1, new Label("Nombre:"), tNombre);
-                grid.addRow(2, new Label("Apellido:"), tApellido);
-                grid.addRow(3, new Label("Telefono:"), tTelefono);
-                grid.addRow(4, new Label("Email:"), tEmail);
-                grid.addRow(5, new Label("Matricula:"), tMatricula);
-                grid.addRow(6, new Label("Especialidad:"), tEspecialidad);
-
-                contenedor.getChildren().addAll(new Label("Registro de veterinario"), grid, btnRegistrar, mensaje);
-
             });
         });
         buscarVeterinarios.setOnAction(e -> {
-                Label mensaje = new Label();
-                TextField tMatricula = crearCampo("Matrícula:");
-                Button buscar = new Button("Buscar");
-                buscar.setOnAction(ev -> {
-                    try {
-                        int matricula = Integer.parseInt(tMatricula.getText().trim());
-                        if (gestor.buscarVeterinario(matricula)) {
-                            mensaje.setText("Veterinario buscado exitosamente: " + gestor.mostrarUnVeterinario(matricula));
-                        } else {
-                            mensaje.setText("Veterinario no existe");
-                        }
-                    } catch (NumberFormatException ex) {
-                        mensaje.setText("Ingrese una matrícula numérica válida");
+            Label mensaje = new Label("Ingrese la matricula del veterinario:");
+            TextField tMatricula = crearCampo("Matricula");
+            Button buscar = new Button("Buscar");
+            buscar.setOnAction(ev -> {
+                try {
+                    int matricula = Integer.parseInt(tMatricula.getText().trim());
+                    if (gestor.buscarVeterinario(matricula)) {
+                        mensaje.setText("Veterinario encontrado: " + gestor.mostrarUnVeterinario(matricula));
+                    } else {
+                        mensaje.setText("Veterinario no existe");
                     }
-                });
-                contenedor.getChildren().addAll(tMatricula, buscar, mensaje);
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese una matricula numerica valida");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tMatricula, buscar);
         });
         eliminarVeterinarios.setOnAction(e -> {
-            Label mensaje = new Label();
-            TextField tMatricula = crearCampo("Matricula:");
-
-            int matricula = Integer.parseInt(tMatricula.getText().trim());
-            if(gestor.buscarVeterinario(matricula)){
-                if(gestor.eliminarVeterinario(matricula)){
-                    mensaje.setText("Veterinario eliminado exitosamente");
-                }else{
-                    mensaje.setStyle("-fx-text-fill: red;");
-                    mensaje.setText("Veterinario no se pudo eliminar");
+            Label mensaje = new Label("Ingrese la matricula del veterinario a eliminar:");
+            TextField tMatricula = crearCampo("Matricula");
+            Button eliminar = new Button("Eliminar");
+            eliminar.setOnAction(ev -> {
+                try {
+                    int matricula = Integer.parseInt(tMatricula.getText().trim());
+                    if (!gestor.buscarVeterinario(matricula)) {
+                        mensaje.setText("Veterinario no existe");
+                    } else if (gestor.eliminarVeterinario(matricula)) {
+                        mensaje.setText("Veterinario eliminado exitosamente");
+                    } else {
+                        mensaje.setText("No se pudo eliminar el veterinario");
+                    }
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese una matricula numerica valida");
                 }
-            }else{
-                mensaje.setStyle("-fx-text-fill: red;");
-                mensaje.setText("Veterinario no existe");
-            }
-            tMatricula.clear();
-            contenedor.getChildren().addAll(mensaje);
+            });
+            contenedor.getChildren().addAll(mensaje, tMatricula, eliminar);
         });
         modificarVeterinarios.setOnAction(e -> {
-            Label mensaje = new Label();
-            TextField tMatricula = crearCampo("Matrícula:");
+            Label mensaje = new Label("Ingrese la matricula del veterinario:");
+            TextField tMatricula = crearCampo("Matricula");
             Button buscar = new Button("Buscar");
             buscar.setOnAction(ev -> {
                 try {
@@ -205,7 +191,7 @@ public class AdministradorUi {
                         return;
                     }
 
-                    TextField tEspecialidad = crearCampo("Nueva especialidad:");
+                    TextField tEspecialidad = crearCampo("Nueva especialidad");
                     Button guardar = new Button("Guardar cambio");
                     guardar.setOnAction(ev2 -> {
                         String especialidad = tEspecialidad.getText().trim();
@@ -217,23 +203,23 @@ public class AdministradorUi {
                     });
                     contenedor.getChildren().addAll(tEspecialidad, guardar);
                 } catch (NumberFormatException ex) {
-                    mensaje.setText("Ingrese una matrícula numérica válida");
+                    mensaje.setText("Ingrese una matricula numerica valida");
                 }
             });
-            contenedor.getChildren().addAll(tMatricula, buscar, mensaje);
+            contenedor.getChildren().addAll(mensaje, tMatricula, buscar);
         });
-
         ///Acciones contabilidad
         verFacturas.setOnAction(e -> {
-            Label mensaje = new Label();
+            Label listado = new Label();
+            listado.setWrapText(true);
+            listado.setMaxWidth(650);
             try {
-                mensaje.setText(gestor.VerFacturas());
-                mensaje.setStyle("-fx-font-size: 10");
+                String facturas = gestor.VerFacturas();
+                listado.setText(facturas.isEmpty() ? "No hay facturas activas." : facturas);
             }catch(SQLException ex) {
-                mensaje.setStyle("-fx-text-fill: red;");
-                mensaje.setText("Error al obtener las facturas");
+                listado.setText("Error al obtener las facturas: " + ex.getMessage());
             }
-            contenedor.getChildren().add(mensaje);
+            contenedor.getChildren().add(listado);
         });
         modificarFactura.setOnAction(e ->{
             TextField tId = crearCampo("ID de factura:");
