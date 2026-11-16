@@ -51,7 +51,7 @@ public class VeterinarioDAO {
 
     public boolean modificar(int matricula, String especialidad)throws SQLException{
 
-        String sql= " UPDATE veterinario SET especialidad=? WHERE id= ?";
+        String sql= " UPDATE veterinario SET especialidad=? WHERE matricula= ?";
 
         try(Connection con= ConexionBDD.conectar();
         PreparedStatement ps= con.prepareStatement(sql)){
