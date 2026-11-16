@@ -158,18 +158,21 @@ public class AdministradorUi {
         });
         buscarVeterinarios.setOnAction(e -> {
                 Label mensaje = new Label();
-                TextField tMatricula = crearCampo("Matricula:");
-
-                int matricula = Integer.parseInt(tMatricula.getText().trim());
-                if(gestor.buscarVeterinario(matricula)){
-                    mensaje.setStyle("-fx-text-fill: 10;");
-                    mensaje.setText("Veterinario buscado exitosamente: " + gestor.mostrarUnVeterinario(matricula));
-                }else{
-                    mensaje.setStyle("-fx-text-fill: red;");
-                    mensaje.setText("Veterinario no existe");
-                }
-                tMatricula.clear();
-                contenedor.getChildren().addAll(mensaje);
+                TextField tMatricula = crearCampo("Matrícula:");
+                Button buscar = new Button("Buscar");
+                buscar.setOnAction(ev -> {
+                    try {
+                        int matricula = Integer.parseInt(tMatricula.getText().trim());
+                        if (gestor.buscarVeterinario(matricula)) {
+                            mensaje.setText("Veterinario buscado exitosamente: " + gestor.mostrarUnVeterinario(matricula));
+                        } else {
+                            mensaje.setText("Veterinario no existe");
+                        }
+                    } catch (NumberFormatException ex) {
+                        mensaje.setText("Ingrese una matrícula numérica válida");
+                    }
+                });
+                contenedor.getChildren().addAll(tMatricula, buscar, mensaje);
         });
         eliminarVeterinarios.setOnAction(e -> {
             Label mensaje = new Label();
@@ -192,21 +195,32 @@ public class AdministradorUi {
         });
         modificarVeterinarios.setOnAction(e -> {
             Label mensaje = new Label();
-            TextField tMatricula = crearCampo("Matricula:");
+            TextField tMatricula = crearCampo("Matrícula:");
+            Button buscar = new Button("Buscar");
+            buscar.setOnAction(ev -> {
+                try {
+                    int matricula = Integer.parseInt(tMatricula.getText().trim());
+                    if (!gestor.buscarVeterinario(matricula)) {
+                        mensaje.setText("Veterinario no existe");
+                        return;
+                    }
 
-            int matricula = Integer.parseInt(tMatricula.getText().trim());
-            if(gestor.buscarVeterinario(matricula)){
-                TextField tEspecialidad = crearCampo("Especialidad:");
-                tEspecialidad.setStyle("-fx-text-fill: 10;");
-                String especialidad = tEspecialidad.getText().trim();
-                tEspecialidad.clear();
-                mensaje.setText(gestor.modificarVeterinario(matricula, especialidad));
-            }else{
-                mensaje.setStyle("-fx-text-fill: red;");
-                mensaje.setText("Veterinario no existe");
-            }
-            tMatricula.clear();
-            contenedor.getChildren().addAll(mensaje);
+                    TextField tEspecialidad = crearCampo("Nueva especialidad:");
+                    Button guardar = new Button("Guardar cambio");
+                    guardar.setOnAction(ev2 -> {
+                        String especialidad = tEspecialidad.getText().trim();
+                        if (especialidad.isEmpty()) {
+                            mensaje.setText("Ingrese una especialidad");
+                            return;
+                        }
+                        mensaje.setText(gestor.modificarVeterinario(matricula, especialidad));
+                    });
+                    contenedor.getChildren().addAll(tEspecialidad, guardar);
+                } catch (NumberFormatException ex) {
+                    mensaje.setText("Ingrese una matrícula numérica válida");
+                }
+            });
+            contenedor.getChildren().addAll(tMatricula, buscar, mensaje);
         });
 
         ///Acciones contabilidad
