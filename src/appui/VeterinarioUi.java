@@ -399,9 +399,10 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
 
-            int id = Integer.parseInt(tid.getText().trim());
-            if(gestorV.buscarMascota(id)){
-                contenedor.getChildren().add(new Label("Se encontro la mascota:" + gestorV.historialClinico(id)));
+            String id = tid.getText().trim();
+            int idAux = Integer.parseInt(id);
+            if(gestorV.buscarMascota(idAux)){
+                contenedor.getChildren().add(new Label("Se encontro la mascota:" + gestorV.historialClinico(idAux)));
 
             }else{
                 contenedor.getChildren().add(new Label("No existe la mascota"));
