@@ -59,7 +59,7 @@ public class AdministradorUi {
         Button eliminarFactura = new Button ("Dar de baja la factura");
         eliminarFactura.setStyle("-fx-font-size: 10");
         //crear usuarios
-        Label mensaje3 = new Label("Acciones contabilidad");
+        Label mensaje3 = new Label("Acciones manejo de usuarios");
         mensaje3.setStyle("-fx-font-size: 15");
         Button agregarUsuario = new Button("Agregar usuario");
         agregarUsuario.setStyle("-fx-font-size: 10");
@@ -85,7 +85,7 @@ public class AdministradorUi {
 
         ///Acciones de botones veterinarios
         mostrarVeterinarios.setOnAction(e -> {
-            Label mensaje = new Label(gestor.mostrarVeterinarios());
+            Label mensaje = new Label(gestor.mostrarVeterinarios() + "\n");
             mensaje.setStyle("-fx-font-size: 10");
 
             contenedor.getChildren().add(mensaje);
