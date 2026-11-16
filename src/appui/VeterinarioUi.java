@@ -105,7 +105,7 @@ public class VeterinarioUi {
                 }
 
                 try {
-                    int edadAux = Integer.valueOf(edadTexto);
+                    int edadAux = Integer.parseInt(edadTexto);
 
                     Mascota aux = new Mascota();
                     aux.setNombre(nombre);
@@ -153,7 +153,7 @@ public class VeterinarioUi {
             tid.setPromptText("ID");
             String id = tid.getText();
 
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
 
             Label mensaje2  = new Label(gestorV.eliminarMascota(idAux));
             mensaje2.setStyle("-fx-font-size: 10");
@@ -165,7 +165,7 @@ public class VeterinarioUi {
                     tid.setStyle("-fx-font-size: 10");
                     tid.setPromptText("ID");
                     String id = tid.getText();
-                    int idAux = Integer.valueOf(id);
+                    int idAux = Integer.parseInt(id);
                     if(gestorV.buscarMascota(idAux)){
 
             TextField tnombre = new TextField();
@@ -346,7 +346,7 @@ public class VeterinarioUi {
             tid.setPromptText("ID");
             String id = tid.getText();
 
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
 
             Label mensaje2  = new Label(gestorV.eliminarConsulta(idAux));
             mensaje2.setStyle("-fx-font-size: 10");
@@ -359,7 +359,7 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
 
-            int id = Integer.valueOf(tid.getText());
+            int id = Integer.parseInt(tid.getText());
             if(gestorV.buscarConsulta(id)){
                 TextField tnuevoTratamiento = new TextField();
                 tnuevoTratamiento.setStyle("-fx-font-size: 10");
@@ -385,7 +385,7 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
             String id = tid.getText();
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
             if(gestorV.buscarConsulta(idAux)){
                 contenedor.getChildren().add(new Label("Se econtro la consulta:" + gestorV.mostrarUnaConsulta(idAux)));
             }else{
@@ -399,7 +399,7 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
 
-            int id = Integer.valueOf(tid.getText());
+            int id = Integer.parseInt(tid.getText());
             if(gestorV.buscarMascota(id)){
                 contenedor.getChildren().add(new Label("Se encontro la mascota:" + gestorV.historialClinico(id)));
 
