@@ -1,6 +1,7 @@
 package appui;
 
 import Modelo.Veterinario;
+import Servicio.GestorAdministrador;
 import Servicio.GestorVeterinario;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -31,11 +32,13 @@ public class BienvenidaMenu extends Application {
             vui.mostrar(primaryStage);
         });
         boton2.setOnAction(e -> {
-
+            AdministradorUi guia = new AdministradorUi();
+            guia.mostrarA(primaryStage);
         });
 
         boton3.setOnAction(e -> {
-
+            RecepcionistaUi recepcionista = new RecepcionistaUi();
+            recepcionista.mostrar(primaryStage);
         });
         salir.setOnAction(e -> {
            Platform.exit();

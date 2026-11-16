@@ -66,7 +66,7 @@ public class TurnoDAO {
 
     public boolean modificarTurno(int id, Date fecha, Time hora)throws SQLException{
 
-        String sql= " UPDATE Turnos set fecha= ?, SET hora= ? WHERE id= ?";
+        String sql= "UPDATE turno SET fecha = ?, hora = ? WHERE id = ?";
 
         try(Connection con= ConexionBDD.conectar();
         PreparedStatement ps= con.prepareStatement(sql)) {

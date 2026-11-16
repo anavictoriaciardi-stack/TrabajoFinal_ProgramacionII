@@ -25,7 +25,12 @@ public class VeterinarioUi {
     public VeterinarioUi() {
 
     }
-
+    private TextField crearCampo(String placeholder) {
+        TextField tf = new TextField();
+        tf.setStyle("-fx-font-size: 11px;");
+        tf.setPromptText(placeholder);
+        return tf;
+    }
     public void mostrar(Stage stage){
 
         //Botones de accion
@@ -61,8 +66,8 @@ public class VeterinarioUi {
         botonC6.setStyle("-fx-font-size: 10");
         Button botonVolver = new Button("Volver al menu principal");
         botonVolver.setStyle("-fx-font-size: 10");
-        VBox contenedor = new VBox(15, titulo, subtitulo,boton1, boton3, boton4, boton5, subtitulo2
-                                    , botonC1, botonC2, botonC3, botonC4, botonC5, botonC6);
+        VBox contenedor = new VBox(15, titulo, subtitulo,boton1, boton6, boton3, boton4, boton5, subtitulo2
+                                    , botonC1, botonC2, botonC3, botonC4, botonC5, botonC6, botonVolver);
         ///ACCIONES DE LOS BOTONES MASCOTAS
         boton1.setOnAction(e -> {
            Label mostrar = new Label(gestorV.mostrarMascotas());
@@ -70,62 +75,77 @@ public class VeterinarioUi {
            contenedor.getChildren().add(mostrar);
         });
         boton6.setOnAction(e -> {
-            Mascota aux = new Mascota();
-            TextField tnombre = new TextField();
-            tnombre.setStyle("-fx-font-size: 10");
-            tnombre.setPromptText("Nombre");
-            TextField tespecie = new TextField();
-            tespecie.setStyle("-fx-font-size: 10");
-            tespecie.setPromptText("Especie");
-            TextField traza = new TextField();
-            traza.setStyle("-fx-font-size: 10");
-            traza.setPromptText("Raza");
-            TextField tedad = new TextField();
-            tedad.setStyle("-fx-font-size: 10");
-            tedad.setPromptText("edad");
-            TextField dni_cliente = new TextField();
-            dni_cliente.setStyle("-fx-font-size: 10");
-            dni_cliente.setPromptText("DNI");
+            TextField tNombre = crearCampo("Nombre");
+            TextField tEspecie = crearCampo("Especie");
+            TextField tRaza = crearCampo("Raza");
+            TextField tEdad = crearCampo("Edad (en años)");
+            TextField tDniCliente = crearCampo("DNI del dueño");
 
-            TextArea descripcion = new TextArea();
-            descripcion.setStyle("-fx-font-size: 10");
-            descripcion.setPromptText("Anadir mascota---");
-            descripcion.setPrefRowCount(5);
+            TextArea tDescripcion = new TextArea();
+            tDescripcion.setStyle("-fx-font-size: 11px;");
+            tDescripcion.setPromptText("Descripción o notas de la mascota...");
+            tDescripcion.setPrefRowCount(3);
 
             Label mensaje = new Label();
-            Button botonM = new Button("Registrar mascota");
-            botonM.setStyle("-fx-font-size: 10");
+            Button btnRegistrar = new Button("Registrar mascota");
+            btnRegistrar.setStyle("-fx-font-size: 11px;");
 
-            botonM.setOnAction(e2 ->{
-                String nombre = tnombre.getText();
-                String Especie = tespecie.getText();
-                String Raza = traza.getText();
-                String edad = tedad.getText();
-                String DNI = dni_cliente.getText();
+            btnRegistrar.setOnAction(e2 -> {
+                String nombre = tNombre.getText().trim();
+                String especie = tEspecie.getText().trim();
+                String raza = tRaza.getText().trim();
+                String edadTexto = tEdad.getText().trim();
+                String dni = tDniCliente.getText().trim();
+                String desc = tDescripcion.getText().trim();
 
+                if (nombre.isEmpty() || especie.isEmpty() || dni.isEmpty() || edadTexto.isEmpty()) {
+                    mensaje.setStyle("-fx-text-fill: red;");
+                    mensaje.setText("Error: Completa todos los campos obligatorios.");
+                    return;
+                }
 
-                    int edadAux = Integer.valueOf(edad);
+                try {
+                    int edadAux = Integer.valueOf(edadTexto);
+
+                    Mascota aux = new Mascota();
                     aux.setNombre(nombre);
-                    aux.setEspecie(Especie);
-                    aux.setRaza(Raza);
+                    aux.setEspecie(especie);
+                    aux.setRaza(raza);
                     aux.setEdad(edadAux);
-                    aux.setCliente_dni(DNI);
+                    aux.setCliente_dni(dni);
 
-                    tnombre.clear();
-                    tespecie.clear();
-                    traza.clear();
-                    tedad.clear();
-                    dni_cliente.clear();
                     gestorV.agregarMascota(aux);
-                    mensaje.setText("Registrado exitosamente");
 
-                    contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
-                                                            ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
+                    tNombre.clear();
+                    tEspecie.clear();
+                    tRaza.clear();
+                    tEdad.clear();
+                    tDniCliente.clear();
+                    tDescripcion.clear();
+
+                    mensaje.setStyle("-fx-text-fill: green;");
+                    mensaje.setText("Mascota registrada exitosamente");
+
+                } catch (NumberFormatException ex) {
+                    mensaje.setStyle("-fx-text-fill: red;");
+                    mensaje.setText("Error: La edad debe ser un número válido.");
+                }
+            });
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(8);
+            grid.addRow(0, new Label("Nombre:"), tNombre);
+            grid.addRow(1, new Label("Especie:"), tEspecie);
+            grid.addRow(2, new Label("Raza:"), tRaza);
+            grid.addRow(3, new Label("Edad:"), tEdad);
+            grid.addRow(4, new Label("DNI Cliente:"), tDniCliente);
+            grid.addRow(5, new Label("Descripción:"), tDescripcion);
+
+            contenedor.getChildren().addAll(new Label("Registro de Mascota"), grid, btnRegistrar, mensaje);
             });
 
-            contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
-                    ,new Label("DNI cliente:", dni_cliente),botonM, mensaje );
-        });
+
+
         boton3.setOnAction(e ->{
             Label mensaje = new Label("Ingrese el id para eliminar:");
             TextField tid = new TextField();

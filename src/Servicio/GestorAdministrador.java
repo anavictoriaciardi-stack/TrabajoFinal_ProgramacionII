@@ -76,16 +76,21 @@ public class GestorAdministrador {
 
     }
     ///ModificarVetrinariveterinario
-    public void modificarVeterinario(int matricula, String especialidad){
+    public String modificarVeterinario(int matricula, String especialidad){
         boolean encontro = buscarVeterinario(matricula);
+        String mensaje = "";
         if (encontro) {
             try {
                 dao_veterinario.modificar(matricula,especialidad);
                 listarVeterinarios();
+                mensaje = "Se modifico el veterinario correctamente.";
             } catch (SQLException e) {
-                System.out.println("Error al modificar el Vetrinario. "+e.getMessage());
+                mensaje = "Error al modificar el Vetrinario. "+e.getMessage();
             }
+        }else{
+            mensaje = "No se encontro veterinario";
         }
+        return mensaje;
     }
     ///ListarVetrinarios
     public void listarVeterinarios(){
@@ -150,22 +155,11 @@ public class GestorAdministrador {
     }
     /// Dar de baja una factura
     public boolean darDeBaja(int id) throws SQLException {
-        Factura factura = null;
-        for (Factura f : facturas) {
-            if (f.getId() == id) {
-                factura = f;
-                break;
-            }
+        boolean dadaDeBaja = dao_facturas.darDeBaja(id);
+        if (dadaDeBaja) {
+            facturas.removeIf(f -> f.getId() == id);
         }
-        if (factura != null) {
-            dao_facturas.darDeBaja(id);
-            facturas.remove(factura);
-        }
-        if(facturas.contains(factura)){
-            return true;
-        }else{
-            return false;
-        }
+        return dadaDeBaja;
     }
 
     /// ---------- CREACION DE USUARIOS ---------- ///
