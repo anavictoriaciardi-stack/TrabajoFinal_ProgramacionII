@@ -114,7 +114,7 @@ public class AdministradorUi {
                 String  apellido = tApellido.getText().trim();
                 String  telefono = tTelefono.getText().trim();
                 String  email = tEmail.getText().trim();
-                int  matricula = Integer.valueOf(tMatricula.getText().trim());
+                int  matricula = Integer.parseInt(tMatricula.getText().trim());
                 String  especialidad = tEspecialidad.getText().trim();
 
                 if (nombre.isEmpty() || dni.isEmpty() || telefono.isEmpty() || apellido.isEmpty() || email.isEmpty()) {
@@ -157,7 +157,7 @@ public class AdministradorUi {
                 Label mensaje = new Label();
                 TextField tMatricula = crearCampo("Matricula:");
 
-                int matricula = Integer.valueOf(tMatricula.getText().trim());
+                int matricula = Integer.parseInt(tMatricula.getText().trim());
                 if(gestor.buscarVeterinario(matricula)){
                     mensaje.setStyle("-fx-text-fill: 10;");
                     mensaje.setText("Veterinario buscado exitosamente: " + gestor.mostrarUnVeterinario(matricula));
@@ -172,7 +172,7 @@ public class AdministradorUi {
             Label mensaje = new Label();
             TextField tMatricula = crearCampo("Matricula:");
 
-            int matricula = Integer.valueOf(tMatricula.getText().trim());
+            int matricula = Integer.parseInt(tMatricula.getText().trim());
             if(gestor.buscarVeterinario(matricula)){
                 if(gestor.eliminarVeterinario(matricula)){
                     mensaje.setText("Veterinario eliminado exitosamente");
@@ -191,7 +191,7 @@ public class AdministradorUi {
             Label mensaje = new Label();
             TextField tMatricula = crearCampo("Matricula:");
 
-            int matricula = Integer.valueOf(tMatricula.getText().trim());
+            int matricula = Integer.parseInt(tMatricula.getText().trim());
             if(gestor.buscarVeterinario(matricula)){
                 TextField tEspecialidad = crearCampo("Especialidad:");
                 tEspecialidad.setStyle("-fx-text-fill: 10;");
