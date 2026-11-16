@@ -248,4 +248,14 @@ public class GestorAdministrador {
         }
         return false;
     }
+
+    public Usuario buscarUsuarioXcontrasena(String contrasena){
+        listarUsuarios();
+        for (Usuario c: usuarios) {
+            if (c.getPassword().equals(contrasena)) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

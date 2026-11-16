@@ -68,6 +68,8 @@ public class VeterinarioUi {
         botonVolver.setStyle("-fx-font-size: 10");
         VBox contenedor = new VBox(15, titulo, subtitulo,boton1, boton6, boton3, boton4, boton5, subtitulo2
                                     , botonC1, botonC2, botonC3, botonC4, botonC5, botonC6, botonVolver);
+        ScrollPane scroll = new ScrollPane(contenedor);
+        scroll.setFitToWidth(true);
         ///ACCIONES DE LOS BOTONES MASCOTAS
         boton1.setOnAction(e -> {
            Label mostrar = new Label(gestorV.mostrarMascotas());
@@ -105,7 +107,7 @@ public class VeterinarioUi {
                 }
 
                 try {
-                    int edadAux = Integer.valueOf(edadTexto);
+                    int edadAux = Integer.parseInt(edadTexto);
 
                     Mascota aux = new Mascota();
                     aux.setNombre(nombre);
@@ -153,7 +155,7 @@ public class VeterinarioUi {
             tid.setPromptText("ID");
             String id = tid.getText();
 
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
 
             Label mensaje2  = new Label(gestorV.eliminarMascota(idAux));
             mensaje2.setStyle("-fx-font-size: 10");
@@ -165,7 +167,7 @@ public class VeterinarioUi {
                     tid.setStyle("-fx-font-size: 10");
                     tid.setPromptText("ID");
                     String id = tid.getText();
-                    int idAux = Integer.valueOf(id);
+                    int idAux = Integer.parseInt(id);
                     if(gestorV.buscarMascota(idAux)){
 
             TextField tnombre = new TextField();
@@ -201,7 +203,7 @@ public class VeterinarioUi {
                 String DNI = dni_cliente.getText();
 
 
-                int edadAux = Integer.valueOf(edad);
+                int edadAux = Integer.parseInt(edad);
 
                 Label mostrar = new Label(gestorV.modificarMascota(idAux, nombre, Especie, Raza, edadAux));
                 contenedor.getChildren().addAll(new Label("Nombre de la mascota:"), tnombre, new Label("Especie:"), tespecie, new Label("Raza:"), traza
@@ -346,7 +348,7 @@ public class VeterinarioUi {
             tid.setPromptText("ID");
             String id = tid.getText();
 
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
 
             Label mensaje2  = new Label(gestorV.eliminarConsulta(idAux));
             mensaje2.setStyle("-fx-font-size: 10");
@@ -359,7 +361,7 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
 
-            int id = Integer.valueOf(tid.getText());
+            int id = Integer.parseInt(tid.getText());
             if(gestorV.buscarConsulta(id)){
                 TextField tnuevoTratamiento = new TextField();
                 tnuevoTratamiento.setStyle("-fx-font-size: 10");
@@ -385,7 +387,7 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
             String id = tid.getText();
-            int idAux = Integer.valueOf(id);
+            int idAux = Integer.parseInt(id);
             if(gestorV.buscarConsulta(idAux)){
                 contenedor.getChildren().add(new Label("Se econtro la consulta:" + gestorV.mostrarUnaConsulta(idAux)));
             }else{
@@ -399,21 +401,27 @@ public class VeterinarioUi {
             tid.setStyle("-fx-font-size: 10");
             tid.setPromptText("ID");
 
-            int id = Integer.valueOf(tid.getText());
-            if(gestorV.buscarMascota(id)){
-                contenedor.getChildren().add(new Label("Se encontro la mascota:" + gestorV.historialClinico(id)));
-
-            }else{
-                contenedor.getChildren().add(new Label("No existe la mascota"));
-            }
-
-            tid.clear();
+            Label resultado = new Label();
+            Button buscar = new Button("Buscar historial");
+            buscar.setOnAction(ev -> {
+                try {
+                    int id = Integer.parseInt(tid.getText().trim());
+                    if(gestorV.buscarMascota(id)){
+                        resultado.setText("Se encontro la mascota:" + gestorV.historialClinico(id));
+                    }else{
+                        resultado.setText("No existe la mascota");
+                    }
+                } catch (NumberFormatException ex) {
+                    resultado.setText("Ingrese un ID numérico válido");
+                }
+            });
+            contenedor.getChildren().addAll(mensaje, tid, buscar, resultado);
         });
         botonVolver.setOnAction(e ->{
             BienvenidaMenu inicio = new BienvenidaMenu();
             inicio.start(stage);
         });
-        Scene scena = new Scene(contenedor, 750, 500);
+        Scene scena = new Scene(scroll, 750, 500);
         stage.setTitle("Pagina veterinarios");
         stage.setScene(scena);
     }

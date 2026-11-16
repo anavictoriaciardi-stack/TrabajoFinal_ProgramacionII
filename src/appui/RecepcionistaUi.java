@@ -8,6 +8,7 @@ import Servicio.GestorRecepcionista;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -63,6 +64,8 @@ public class RecepcionistaUi {
         VBox contenido = new VBox(10, titulo, clientesTitulo, agregarCliente, buscarCliente,
                 eliminarCliente, turnosTitulo, mostrarTurnos, agregarTurno, buscarTurno,
                 modificarTurno, eliminarTurno, resultado, volver);
+        ScrollPane scroll = new ScrollPane(contenido);
+        scroll.setFitToWidth(true);
 
         agregarCliente.setOnAction(e -> {
             TextField dni = campo("DNI");
@@ -216,7 +219,7 @@ public class RecepcionistaUi {
             BienvenidaMenu inicio = new BienvenidaMenu();
             inicio.start(stage);
         });
-        Scene scene = new Scene(contenido, 750, 600);
+        Scene scene = new Scene(scroll, 750, 600);
         stage.setTitle("Zona recepcionista");
         stage.setScene(scene);
         stage.show();

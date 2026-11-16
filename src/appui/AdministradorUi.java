@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -79,6 +80,8 @@ public class AdministradorUi {
                 eliminarFactura, modificarFactura, mensaje3
                 , modificarUsuario, buscarUsuario,
                 agregarUsuario, eliminarUsuario, volver);
+        ScrollPane scroll = new ScrollPane(contenedor);
+        scroll.setFitToWidth(true);
 
         ///Acciones de botones veterinarios
         mostrarVeterinarios.setOnAction(e -> {
@@ -114,7 +117,7 @@ public class AdministradorUi {
                 String  apellido = tApellido.getText().trim();
                 String  telefono = tTelefono.getText().trim();
                 String  email = tEmail.getText().trim();
-                int  matricula = Integer.valueOf(tMatricula.getText().trim());
+                int  matricula = Integer.parseInt(tMatricula.getText().trim());
                 String  especialidad = tEspecialidad.getText().trim();
 
                 if (nombre.isEmpty() || dni.isEmpty() || telefono.isEmpty() || apellido.isEmpty() || email.isEmpty()) {
@@ -157,7 +160,7 @@ public class AdministradorUi {
                 Label mensaje = new Label();
                 TextField tMatricula = crearCampo("Matricula:");
 
-                int matricula = Integer.valueOf(tMatricula.getText().trim());
+                int matricula = Integer.parseInt(tMatricula.getText().trim());
                 if(gestor.buscarVeterinario(matricula)){
                     mensaje.setStyle("-fx-text-fill: 10;");
                     mensaje.setText("Veterinario buscado exitosamente: " + gestor.mostrarUnVeterinario(matricula));
@@ -172,7 +175,7 @@ public class AdministradorUi {
             Label mensaje = new Label();
             TextField tMatricula = crearCampo("Matricula:");
 
-            int matricula = Integer.valueOf(tMatricula.getText().trim());
+            int matricula = Integer.parseInt(tMatricula.getText().trim());
             if(gestor.buscarVeterinario(matricula)){
                 if(gestor.eliminarVeterinario(matricula)){
                     mensaje.setText("Veterinario eliminado exitosamente");
@@ -191,7 +194,7 @@ public class AdministradorUi {
             Label mensaje = new Label();
             TextField tMatricula = crearCampo("Matricula:");
 
-            int matricula = Integer.valueOf(tMatricula.getText().trim());
+            int matricula = Integer.parseInt(tMatricula.getText().trim());
             if(gestor.buscarVeterinario(matricula)){
                 TextField tEspecialidad = crearCampo("Especialidad:");
                 tEspecialidad.setStyle("-fx-text-fill: 10;");
@@ -504,7 +507,7 @@ public class AdministradorUi {
             BienvenidaMenu inicio = new BienvenidaMenu();
             inicio.start(stage);
         });
-        Scene scena = new Scene(contenedor, 750, 500);
+        Scene scena = new Scene(scroll, 750, 500);
         stage.setTitle("Zona administradores");
         stage.setScene(scena);
         stage.show();
