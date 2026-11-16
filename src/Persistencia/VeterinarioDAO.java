@@ -22,7 +22,7 @@ public class VeterinarioDAO {
             ps.setString(6, vet.getEmail());
             ps.setString(7, vet.getEspecialidad());
             ps.executeUpdate();
-            System.out.println("Veterinario insertado correctamente.");
+
         }
     }
 // listar todos los veterinarios
@@ -51,7 +51,7 @@ public class VeterinarioDAO {
 
     public boolean modificar(int matricula, String especialidad)throws SQLException{
 
-        String sql= " UPDATE veterinario SET especialidad WHERE id= ?";
+        String sql= " UPDATE veterinario SET especialidad=? WHERE id= ?";
 
         try(Connection con= ConexionBDD.conectar();
         PreparedStatement ps= con.prepareStatement(sql)){
@@ -64,21 +64,15 @@ public class VeterinarioDAO {
 
 
     // ELIMINAR VETERINARIO POR MATRÍCULA
-    public void eliminar(int matricula) throws SQLException{
+    public boolean eliminar(int matricula) throws SQLException{
         String sql = "DELETE FROM veterinario WHERE matricula = ?";
 
         try (Connection conn = ConexionBDD.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, matricula);
-            int filasAfectadas = ps.executeUpdate();
 
-            if (filasAfectadas > 0) {
-                System.out.println("Veterinario eliminado correctamente.");
-            } else {
-                System.out.println("No se encontró un veterinario con esa matrícula.");
-            }
-
+            return ps.executeUpdate()>0;
         }
     }
 }

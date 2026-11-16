@@ -13,11 +13,11 @@ import java.util.List;
 public class TurnoDAO {
 
     // 1. INSERTAR TURNO
-    public void insertar(Turno turno) throws SQLException{
+    public int insertar(Turno turno) throws SQLException{
         String sql = "INSERT INTO turno (fecha, hora, costo, cliente_dni, matricula_veterinario) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionBDD.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setDate(1, Date.valueOf(turno.getFecha()));
             ps.setTime(2, Time.valueOf(turno.getHora()));
@@ -30,11 +30,12 @@ public class TurnoDAO {
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int idGenerado = generatedKeys.getInt(1);
-                    turno.setID(idGenerado); // Se lo asignamos al objeto en memoria
+                    turno.setID(idGenerado);
+                    return idGenerado;
                 }
             }
-
         }
+        return -1;
     }
 
     // 2. LISTAR TURNOS
@@ -43,8 +44,8 @@ public class TurnoDAO {
         String sql = "SELECT * FROM turno";
 
         try (Connection conn = ConexionBDD.conectar();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+             PreparedStatement st = conn.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 Turno t = new Turno();
